@@ -1,0 +1,10 @@
+version: "3"
+services:
+  db:
+    image: mongo
+    volumes:
+      - dbdata:/data/db
+    ports:
+      - 27017:27017
+volumes:
+  dbdata:

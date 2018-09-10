@@ -1,0 +1,24 @@
+{
+    "private": true,
+    "name": "aquarium",
+    "version": "1.0.0",
+    "description": "Aquarium webapp using GraphQL",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Sergio Fernández",
+    "license": "ISC",
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "prettier": "^1.14.0"
+    },
+    "prettier": {
+        "printWidth": 110,
+        "tabWidth": 4,
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "bracketSpacing": false
+    }
+}
