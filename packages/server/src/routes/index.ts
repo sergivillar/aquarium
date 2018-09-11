@@ -3,10 +3,11 @@ import passport from 'passport';
 
 const router = express.Router();
 
-router.post('/singup', (req: Request, res: Response) => {
+router.post('/singup', (req: Request, res: Response, next) => {
     passport.authenticate('singup', {session: false}, (err, user, info) => {
         if (err || !user) {
-            return res.send(err);
+            return next(err);
+            // return res.send(err);
         }
 
         // TODO: generate JWT

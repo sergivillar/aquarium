@@ -13,6 +13,7 @@
         "@babel/cli": "^7.0.0",
         "@babel/core": "^7.0.0",
         "@babel/node": "^7.0.0",
+        "@babel/plugin-proposal-class-properties": "^7.0.0",
         "@babel/preset-env": "^7.0.0",
         "@babel/preset-typescript": "^7.0.0",
         "@types/bcrypt": "^2.0.0",
