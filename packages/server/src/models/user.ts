@@ -1,13 +1,12 @@
-import mongoose from 'mongoose';
+import * as Sequelize from 'sequelize';
 import bcrypt from 'bcrypt';
 
-mongoose.set('useCreateIndex', true);
-
-const Schema = mongoose.Schema;
-
-export interface IUser extends mongoose.Document {
+export interface UserAttributes {
+    id?: string;
     email: string;
     password: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 const generatePasswordHash = async (password: string): Promise<string> => {
@@ -15,14 +14,26 @@ const generatePasswordHash = async (password: string): Promise<string> => {
     return await bcrypt.hash(password, saltRounds);
 };
 
-const UserSchema = new Schema({
-    email: {type: String, required: true, index: true, unique: true},
-    password: {type: String, required: true, minlength: 6, maxlength: 12},
-});
+export type UserInstance = Sequelize.Instance<UserAttributes> & UserAttributes;
 
-UserSchema.pre<IUser>('save', async function() {
-    const hash = await generatePasswordHash(this.password);
-    this.password = hash;
-});
+const user = (sequelize: Sequelize.Sequelize) => {
+    const attributes = {
+        id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
+        email: {type: Sequelize.STRING, uniqu: true, allowNull: false, primaryKey: true},
+        password: {type: Sequelize.STRING, allowNull: false, len: [6, 12]},
+    };
 
-export default mongoose.model<IUser>('User', UserSchema);
+    const User = sequelize.define<UserInstance, UserAttributes>('user', attributes);
+
+    User.beforeCreate(async user => {
+        user.password = await generatePasswordHash(user.password);
+    });
+
+    // User.associate = models => {
+    //     User.hasMany(models.Message);
+    // };
+
+    return User;
+};
+
+export default user;

@@ -1,6 +1,7 @@
 import {makeExecutableSchema, addMockFunctionsToSchema} from 'graphql-tools';
 import {Document} from 'mongoose';
-import User from './models/user';
+import models from './models';
+import {UserInstance} from './models/user';
 
 const typeDefs = `
 type User {
@@ -32,14 +33,18 @@ type Mutation {
 const resolvers = {
     Query: {
         // | any in args --> https://github.com/apollographql/graphql-tools/issues/704
-        user: async (_: any, args: {email: string} | any): Promise<Document | null> => {
-            return await User.findOne({email: args.email});
+        user: async (_: any, args: {email: string} | any): Promise<UserInstance | null> => {
+            return (await models.User.findOne({
+                where: {email: args.email},
+            })) as UserInstance;
         },
     },
     Mutation: {
-        signUp: (_: any, {email, password}: {email: string; password: string} | any) => {
-            const newUser = new User({email, password});
-            return newUser.save();
+        signUp: async (
+            _: any,
+            {email, password}: {email: string; password: string} | any
+        ): Promise<UserInstance> => {
+            return (await models.User.create({email, password})) as UserInstance;
         },
     },
 };

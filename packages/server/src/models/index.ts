@@ -1,19 +1,20 @@
-import mongoose from 'mongoose';
+import Sequelize from 'sequelize';
 
-const db = mongoose.connection;
-
-function init() {
-    mongoose.connect(
-        'mongodb://localhost:27017/local',
-        {useNewUrlParser: true}
-    );
-}
-
-db.on('error', () => {
-    console.log('FAILED to connect to MongoDB');
-});
-db.once('open', () => {
-    console.log('Connected to MongoDB');
+const sequelize = new Sequelize('postgres', 'postgres', 'password', {
+    dialect: 'postgres',
+    operatorsAliases: Sequelize.Op as any,
 });
 
-export default {init};
+const models = {
+    User: sequelize.import('./user'),
+};
+
+Object.values(models).forEach((model: any) => {
+    if (model.associate) {
+        model.associate(models);
+    }
+});
+
+export {sequelize};
+
+export default models;

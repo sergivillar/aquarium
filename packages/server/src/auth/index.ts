@@ -1,6 +1,6 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import User from '../models/user';
+import models from '../models';
 import APIError from '../errors';
 
 const LocalStrategy = passportLocal.Strategy;
@@ -14,11 +14,11 @@ passport.use(
         },
         async (email: string, password: string, done: Function) => {
             try {
-                if (User.findOne({email})) {
+                if (await models.User.findOne({where: {email}})) {
                     return done(new APIError('User already exists', 400));
                 }
 
-                const user = await User.create({email, password});
+                const user = await models.User.create({email, password});
                 return done(null, user);
             } catch (error) {
                 done(error);
