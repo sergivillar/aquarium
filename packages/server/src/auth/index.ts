@@ -2,7 +2,6 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import models from '../models';
 import {validatePassword, UserInstance} from '../models/user';
-import APIError from '../errors';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -40,12 +39,12 @@ passport.use(
                 const user = (await models.User.findOne({where: {email}})) as UserInstance;
 
                 if (!user) {
-                    return done(new APIError('User not found', 400));
+                    return done('User not found');
                 }
 
                 const validate = await validatePassword(password, user.password);
                 if (!validate) {
-                    return done(new APIError('Wrong password', 400));
+                    return done('Wrong password');
                 }
 
                 return done(null, user);

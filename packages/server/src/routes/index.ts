@@ -17,9 +17,9 @@ router.post('/singup', (req: Request, res: Response, next) => {
 });
 
 router.post('/login', (req: Request, res: Response, next) => {
-    passport.authenticate('login', {session: false}, async (err, user) => {
+    passport.authenticate('login', {session: false}, async (err, user, info) => {
         if (err || !user) {
-            return next(err);
+            return next(new APIError(err || info.message || info, 400));
         }
         return res.status(201).json({
             token: await createToken(user, 'MY_SECRET'),

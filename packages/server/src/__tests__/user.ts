@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 import http from 'http';
 import {startTestServer, endTestSerer} from '../utils/test';
+import models from '../models';
 
 let server: http.Server;
 
@@ -9,6 +10,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    await models.User.destroy({truncate: true});
     await endTestSerer();
 });
 
@@ -48,5 +50,43 @@ describe('Create user test', () => {
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toBe('User already exists');
+    });
+});
+
+describe('Login', () => {
+    const email = 'user';
+
+    beforeAll(async () => {
+        await models.User.create({
+            email,
+            password: '123456',
+        });
+    });
+
+    it('Missing data (email/pass)', async () => {
+        const response = await supertest(server).post('/login');
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Missing credentials');
+    });
+
+    it('User not found', async () => {
+        const response = await supertest(server)
+            .post('/login')
+            .send({email: 'not_found', password: '123456'});
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('User not found');
+    });
+
+    it('User login ok', async () => {
+        const response = await supertest(server)
+            .post('/login')
+            .send({email: 'user', password: '123456'});
+
+        expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('token');
     });
 });
