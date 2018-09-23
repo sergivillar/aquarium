@@ -1,9 +1,10 @@
+import path from 'path';
 import Sequelize from 'sequelize';
 
-const sequelize = new Sequelize('postgres', 'postgres', 'password', {
-    dialect: 'postgres',
-    operatorsAliases: Sequelize.Op as any,
-});
+const env = process.env.NODE_ENV || 'development';
+const config = require(path.join(__dirname, '/../../dbconfig.js'))[env];
+
+const sequelize = new Sequelize(config);
 
 const models = {
     User: sequelize.import('./user'),

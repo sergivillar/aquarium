@@ -1,5 +1,4 @@
 import {makeExecutableSchema, addMockFunctionsToSchema} from 'graphql-tools';
-import {Document} from 'mongoose';
 import models from './models';
 import {UserInstance} from './models/user';
 

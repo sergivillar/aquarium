@@ -30,13 +30,14 @@ export const createToken = async (user: UserInstance, secret: string): Promise<s
 const user = (sequelize: Sequelize.Sequelize) => {
     const attributes = {
         id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
-        email: {type: Sequelize.STRING, uniqu: true, allowNull: false, primaryKey: true},
-        password: {type: Sequelize.STRING, allowNull: false, len: [6, 12]},
+        email: {type: Sequelize.STRING, unique: true, allowNull: false, primaryKey: true},
+        password: {type: Sequelize.STRING, validate: {len: [6, 12]}},
     };
 
+    // @ts-ignore
     const User = sequelize.define<UserInstance, UserAttributes>('user', attributes);
 
-    User.beforeCreate(async user => {
+    User.beforeCreate(async (user: UserInstance) => {
         user.password = await generatePasswordHash(user.password);
     });
 
