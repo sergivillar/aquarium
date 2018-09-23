@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/singup', (req: Request, res: Response, next) => {
     passport.authenticate('singup', {session: false}, async (err, user, info) => {
         if (err || !user) {
-            return next(new APIError(err || info, 400));
+            return next(new APIError(err || info.message || info, 400));
         }
         return res.status(201).json({
             token: await createToken(user, 'MY_SECRET'),

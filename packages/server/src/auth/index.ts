@@ -16,13 +16,13 @@ passport.use(
         async (email: string, password: string, done: Function) => {
             try {
                 if (await models.User.findOne({where: {email}})) {
-                    return done(new APIError('User already exists', 400));
+                    return done('User already exists');
                 }
 
                 const user = await models.User.create({email, password});
                 return done(null, user);
             } catch (error) {
-                done(error);
+                return done(error.errors[0].message);
             }
         }
     )

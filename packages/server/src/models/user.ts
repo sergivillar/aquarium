@@ -31,7 +31,10 @@ const user = (sequelize: Sequelize.Sequelize) => {
     const attributes = {
         id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
         email: {type: Sequelize.STRING, unique: true, allowNull: false, primaryKey: true},
-        password: {type: Sequelize.STRING, validate: {len: [6, 12]}},
+        password: {
+            type: Sequelize.STRING,
+            validate: {len: {msg: 'Password length must be between 6 and 12', args: [6, 12]}},
+        },
     };
 
     // @ts-ignore

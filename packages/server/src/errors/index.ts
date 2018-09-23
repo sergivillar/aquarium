@@ -4,7 +4,6 @@ class APIError extends Error {
     constructor(message: string, code?: number) {
         super();
         Object.setPrototypeOf(this, new.target.prototype);
-
         Error.captureStackTrace(this, this.constructor);
 
         this.name = this.constructor.name;
