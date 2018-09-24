@@ -9,6 +9,7 @@ import routes from '../routes';
 let server: http.Server;
 
 const startTestServer = async () => {
+    require('dotenv').config();
     require('../auth');
 
     const app = express();

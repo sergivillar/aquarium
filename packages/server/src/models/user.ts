@@ -21,9 +21,16 @@ export const validatePassword = async (password: string, userPassword: string): 
     return await bcrypt.compare(password, userPassword);
 };
 
-export const createToken = async (user: UserInstance, secret: string): Promise<string> => {
+export const createToken = async (user: UserInstance): Promise<string> => {
     const {id, email} = user;
-    return await jwt.sign({id, email}, secret);
+
+    const secret = process.env.JWT_SECRET;
+
+    if (!secret) {
+        console.error('JWT Secret not defined');
+    }
+
+    return await jwt.sign({id, email}, secret || 'secret');
 };
 
 // TODO: validate user email

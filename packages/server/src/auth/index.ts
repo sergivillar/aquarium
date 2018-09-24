@@ -1,5 +1,6 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
+import {ExtractJwt, Strategy as JwtStrategy} from 'passport-jwt';
 import models from '../models';
 import {validatePassword, UserInstance} from '../models/user';
 
@@ -50,6 +51,23 @@ passport.use(
                 return done(null, user);
             } catch (error) {
                 return done(error);
+            }
+        }
+    )
+);
+
+passport.use(
+    new JwtStrategy(
+        {
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            secretOrKey: process.env.JWT_SECRET,
+        },
+        async (jwtPayload, done) => {
+            try {
+                const user = await models.User.findById(jwtPayload.id);
+                return done(null, user);
+            } catch (e) {
+                return done(e);
             }
         }
     )

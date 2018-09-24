@@ -11,7 +11,7 @@ router.post('/singup', (req: Request, res: Response, next) => {
             return next(new APIError(err || info.message || info, 400));
         }
         return res.status(201).json({
-            token: await createToken(user, 'MY_SECRET'),
+            token: await createToken(user),
         });
     })(req, res);
 });
@@ -22,7 +22,7 @@ router.post('/login', (req: Request, res: Response, next) => {
             return next(new APIError(err || info.message || info, 400));
         }
         return res.status(201).json({
-            token: await createToken(user, 'MY_SECRET'),
+            token: await createToken(user),
         });
     })(req, res);
 });
