@@ -9,6 +9,7 @@ const sequelize = new Sequelize(config);
 
 const models = {
     User: sequelize.import('./user'),
+    Aquariumº: sequelize.import('./aquarium'),
 };
 
 Object.values(models).forEach((model: any) => {

@@ -45,15 +45,15 @@ const user = (sequelize: Sequelize.Sequelize) => {
     };
 
     // @ts-ignore
-    const User = sequelize.define<UserInstance, UserAttributes>('user', attributes);
+    const User = sequelize.define<UserInstance, IUserAttributes>('user', attributes);
 
     User.beforeCreate(async (userInstance: UserInstance) => {
         userInstance.password = await generatePasswordHash(userInstance.password);
     });
 
-    // User.associate = models => {
-    //     User.hasMany(models.Message);
-    // };
+    User.associate = (models: any) => {
+        User.hasMany(models.Aquarium, {foreignKey: 'user_id'});
+    };
 
     return User;
 };
