@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-export interface UserAttributes {
+export interface IUserAttributes {
     id?: string;
     email: string;
     password: string;
@@ -10,19 +10,19 @@ export interface UserAttributes {
     updatedAt?: string;
 }
 
-export type UserInstance = Sequelize.Instance<UserAttributes> & UserAttributes;
+export type UserInstance = Sequelize.Instance<IUserAttributes> & IUserAttributes;
 
 const generatePasswordHash = async (password: string): Promise<string> => {
     const saltRounds = 10;
     return await bcrypt.hash(password, saltRounds);
 };
 
-export const validatePassword = async (password: string, userPassword: string): Promise<Boolean> => {
+export const validatePassword = async (password: string, userPassword: string): Promise<boolean> => {
     return await bcrypt.compare(password, userPassword);
 };
 
-export const createToken = async (user: UserInstance): Promise<string> => {
-    const {id, email} = user;
+export const createToken = async (userInstance: UserInstance): Promise<string> => {
+    const {id, email} = userInstance;
 
     const secret = process.env.JWT_SECRET;
 
@@ -47,8 +47,8 @@ const user = (sequelize: Sequelize.Sequelize) => {
     // @ts-ignore
     const User = sequelize.define<UserInstance, UserAttributes>('user', attributes);
 
-    User.beforeCreate(async (user: UserInstance) => {
-        user.password = await generatePasswordHash(user.password);
+    User.beforeCreate(async (userInstance: UserInstance) => {
+        userInstance.password = await generatePasswordHash(userInstance.password);
     });
 
     // User.associate = models => {

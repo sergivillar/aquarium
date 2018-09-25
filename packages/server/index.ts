@@ -1,5 +1,6 @@
-import express, {Request, Response} from 'express';
+import express, {Request} from 'express';
 import http from 'http';
+import dotenv from 'dotenv';
 import passport from 'passport';
 import {ApolloServer} from 'apollo-server-express';
 import {schema} from './src/schema';
@@ -9,9 +10,10 @@ import {sequelize} from './src/models';
 import APIError from './src/errors';
 
 if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
+    dotenv.config();
 }
 
+// tslint:disable-next-line
 require('./src/auth');
 
 const app = express();
@@ -41,7 +43,12 @@ app.use('/graphql', (req, res, next) => {
     })(req, res, next);
 });
 
-const apolloServer = new ApolloServer({schema});
+const apolloServer = new ApolloServer({
+    schema,
+    context: ({req}: {req: Request}) => ({
+        user: req.user,
+    }),
+});
 apolloServer.applyMiddleware({app});
 
 app.use(errorMiddleware);
@@ -49,6 +56,7 @@ app.use(errorMiddleware);
 // TODO: only force if dev mode
 sequelize.sync({force: true}).then(() => {
     server = app.listen({port: 4000}, () => {
+        // tslint:disable-next-line
         console.log(`🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`);
     });
 });

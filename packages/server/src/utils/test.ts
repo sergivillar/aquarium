@@ -1,6 +1,5 @@
 import http from 'http';
 import express from 'express';
-import Sequelize from 'sequelize';
 import {errorMiddleware} from '../utils/middleware';
 import {sequelize} from '../models';
 import passport from 'passport';

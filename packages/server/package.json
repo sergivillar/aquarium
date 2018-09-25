@@ -7,7 +7,8 @@
         "initdb": "docker-compose up -d",
         "start": "nodemon index.ts --exec babel-node --extensions '.ts' index.ts",
         "check-types": "tsc",
-        "test": "NODE_ENV=test jest"
+        "test": "NODE_ENV=test jest",
+        "lint": "node_modules/.bin/tslint -p ../../tsconfig.json"
     },
     "author": "",
     "license": "ISC",
@@ -19,6 +20,7 @@
         "@babel/preset-env": "^7.0.0",
         "@babel/preset-typescript": "^7.0.0",
         "@types/bcrypt": "^2.0.0",
+        "@types/dotenv": "^4.0.3",
         "@types/express": "^4.16.0",
         "@types/jest": "^23.3.2",
         "@types/jsonwebtoken": "^7.2.8",
@@ -33,6 +35,9 @@
         "jest": "^23.6.0",
         "nodemon": "^1.18.3",
         "supertest": "^3.3.0",
+        "tslint": "^5.11.0",
+        "tslint-config-prettier": "^1.15.0",
+        "tslint-eslint-rules": "^5.4.0",
         "typescript": "^3.0.3"
     },
     "dependencies": {

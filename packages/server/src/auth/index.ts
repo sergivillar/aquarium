@@ -13,13 +13,17 @@ passport.use(
             usernameField: 'email',
             passwordField: 'password',
         },
-        async (email: string, password: string, done: Function) => {
+        async (
+            email: string,
+            password: string,
+            done: (error: string | null, user?: UserInstance) => void
+        ) => {
             try {
                 if (await models.User.findOne({where: {email}})) {
                     return done('User already exists');
                 }
 
-                const user = await models.User.create({email, password});
+                const user = (await models.User.create({email, password})) as UserInstance;
                 return done(null, user);
             } catch (error) {
                 return done(error.errors[0].message);
