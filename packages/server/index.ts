@@ -54,7 +54,7 @@ apolloServer.applyMiddleware({app});
 app.use(errorMiddleware);
 
 // TODO: only force if dev mode
-sequelize.sync({force: true}).then(() => {
+sequelize.sync({force: false}).then(() => {
     server = app.listen({port: 4000}, () => {
         // tslint:disable-next-line
         console.log(`🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`);

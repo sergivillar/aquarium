@@ -6,16 +6,15 @@ const typeDefs = `
 type User {
     id: ID!
     email: String!
+    createdAt: String
 }
 
 type Aquarium {
     id: ID!
-    name: String
-    owner: User
-}
-
-type Token {
-    token: String!
+    name: String!
+    liters: Int!
+    user_id: User!
+    createdAt: String
 }
 
 type Query {
@@ -25,21 +24,23 @@ type Query {
 
 type Mutation {
     # A mutation to add a new user
-    signUp(email: String!, password: String!): Token!
+    addAquarium(name: String!, liters: Int!): Aquarium!
 }
 `;
 
 const resolvers = {
     Query: {
         // | any in args --> https://github.com/apollographql/graphql-tools/issues/704
-        user: async (_: any, args: {email: string} | any): Promise<UserInstance | null> => {
-            return (await models.User.findOne({
-                where: {email: args.email},
-            })) as UserInstance;
+        user: async (
+            _: any,
+            args: {email: string} | any,
+            {user}: {user: UserInstance}
+        ): Promise<UserInstance | null> => {
+            return user;
         },
     },
     Mutation: {
-        signUp: async (
+        addAquarium: async (
             _: any,
             {email, password}: {email: string; password: string} | any
         ): Promise<UserInstance> => {

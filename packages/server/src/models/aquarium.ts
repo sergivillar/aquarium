@@ -13,8 +13,8 @@ export type AquariumInstance = Sequelize.Instance<IAquariumAttributes> & IAquari
 const user = (sequelize: Sequelize.Sequelize) => {
     const attributes = {
         id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
-        name: {type: Sequelize.STRING, allowNull: false, primaryKey: true},
-        liters: {type: Sequelize.NUMBER},
+        name: {type: Sequelize.STRING, allowNull: false},
+        liters: {type: Sequelize.INTEGER},
     };
 
     const Aquarium = sequelize.define<AquariumInstance, IAquariumAttributes>('aquarium', attributes);
