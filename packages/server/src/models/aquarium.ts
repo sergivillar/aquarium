@@ -13,19 +13,14 @@ export type AquariumInstance = Sequelize.Instance<IAquariumAttributes> & IAquari
 const aquarium = (sequelize: Sequelize.Sequelize) => {
     const attributes = {
         id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
-        name: {type: Sequelize.STRING, allowNull: false, unique: 'compositeIndex'},
-        liters: {type: Sequelize.INTEGER},
-        user_id: {
-            type: Sequelize.UUID,
+        name: {
+            type: Sequelize.STRING,
             allowNull: false,
-            unique: 'compositeIndex',
-            references: {
-                model: 'users',
-                key: 'id',
-            },
         },
+        liters: {type: Sequelize.INTEGER},
     };
 
+    // @ts-ignore
     const Aquarium = sequelize.define<AquariumInstance, IAquariumAttributes>('aquariums', attributes, {
         freezeTableName: true,
     });

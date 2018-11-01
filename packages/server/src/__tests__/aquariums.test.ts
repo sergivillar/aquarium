@@ -42,7 +42,7 @@ describe('Create aquarium to a user', () => {
     });
 
     it('Name and liters ok', async () => {
-        const name = 'test';
+        const name = 'aquarium';
         const liters = 100;
 
         const expectResult = {
@@ -65,30 +65,5 @@ describe('Create aquarium to a user', () => {
             .send(addAquariumMutation({name: null, liters: 100}));
 
         expect(response.status).toBe(400);
-    });
-
-    it('Can not create two aquariums same name same user', async () => {
-        const name = 'test_aquarium';
-        const liters = 100;
-
-        const expectResult = {
-            data: {addAquarium: {name, liters, user_id: user.id}},
-        };
-
-        const response = await supertest(app)
-            .post('/graphql')
-            .set('Authorization', 'Bearer ' + token)
-            .send(addAquariumMutation({name, liters}));
-
-        expect(response.status).toBe(200);
-        expect(response.body).toMatchObject(expectResult);
-
-        const response2 = await supertest(app)
-            .post('/graphql')
-            .set('Authorization', 'Bearer ' + token)
-            .send(addAquariumMutation({name, liters}));
-
-        expect(response2.status).toBe(200);
-        expect(response2.body).toMatchObject(expectResult);
     });
 });
