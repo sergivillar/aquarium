@@ -1,11 +1,13 @@
 import {makeExecutableSchema, addMockFunctionsToSchema} from 'graphql-tools';
 import models from './models';
 import {UserInstance} from './models/user';
+import {AquariumInstance} from './models/aquarium';
 
 const typeDefs = `
 type User {
     id: ID!
     email: String!
+    aquariums : [Aquarium]
     createdAt: String
 }
 
@@ -13,7 +15,7 @@ type Aquarium {
     id: ID!
     name: String!
     liters: Int!
-    user_id: User!
+    user_id: ID!
     createdAt: String
 }
 
@@ -39,12 +41,21 @@ const resolvers = {
             return user;
         },
     },
+    User: {
+        aquariums: (user: UserInstance) =>
+            models.Aquarium.findAll({
+                where: {
+                    user_id: user.id,
+                },
+            }),
+    },
     Mutation: {
         addAquarium: async (
             _: any,
-            {email, password}: {email: string; password: string} | any
-        ): Promise<UserInstance> => {
-            return (await models.User.create({email, password})) as UserInstance;
+            {name, liters}: {name: string; liters: number} | any,
+            {user}: {user: UserInstance}
+        ): Promise<AquariumInstance> => {
+            return (await models.Aquarium.create({name, liters, user_id: user.id})) as AquariumInstance;
         },
     },
 };

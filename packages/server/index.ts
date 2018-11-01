@@ -25,7 +25,7 @@ app.use(passport.initialize());
 
 app.use('/', routes);
 
-app.use('/graphql', (req, res, next) => {
+app.post('/graphql', (req, res, next) => {
     passport.authenticate('jwt', {session: false}, (err, user, info) => {
         if (err || info) {
             return next(new APIError(err || info.message || info, 401));

@@ -45,7 +45,9 @@ const user = (sequelize: Sequelize.Sequelize) => {
     };
 
     // @ts-ignore
-    const User = sequelize.define<UserInstance, IUserAttributes>('user', attributes);
+    const User = sequelize.define<UserInstance, IUserAttributes>('users', attributes, {
+        freezeTableName: true,
+    });
 
     User.beforeCreate(async (userInstance: UserInstance) => {
         userInstance.password = await generatePasswordHash(userInstance.password);

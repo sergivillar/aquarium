@@ -10,14 +10,16 @@ export interface IAquariumAttributes {
 
 export type AquariumInstance = Sequelize.Instance<IAquariumAttributes> & IAquariumAttributes;
 
-const user = (sequelize: Sequelize.Sequelize) => {
+const aquarium = (sequelize: Sequelize.Sequelize) => {
     const attributes = {
         id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
         name: {type: Sequelize.STRING, allowNull: false},
         liters: {type: Sequelize.INTEGER},
     };
 
-    const Aquarium = sequelize.define<AquariumInstance, IAquariumAttributes>('aquarium', attributes);
+    const Aquarium = sequelize.define<AquariumInstance, IAquariumAttributes>('aquariums', attributes, {
+        freezeTableName: true,
+    });
 
     Aquarium.associate = (models: any) => {
         Aquarium.belongsTo(models.User, {foreignKey: 'user_id'});
@@ -26,4 +28,4 @@ const user = (sequelize: Sequelize.Sequelize) => {
     return Aquarium;
 };
 
-export default user;
+export default aquarium;
