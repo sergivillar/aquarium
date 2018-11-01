@@ -1,22 +1,10 @@
 import supertest from 'supertest';
-import http from 'http';
-import {startTestServer, endTestSerer} from '../utils/test';
 import models from '../models';
-
-let server: http.Server;
-
-beforeAll(async () => {
-    server = await startTestServer();
-});
-
-afterAll(async () => {
-    await models.User.destroy({truncate: true});
-    await endTestSerer();
-});
+import app from '../../app';
 
 describe('Create user test', () => {
     it('Missing data (email/pass)', async () => {
-        const response = await supertest(server).post('/singup');
+        const response = await supertest(app).post('/singup');
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
@@ -24,7 +12,7 @@ describe('Create user test', () => {
     });
 
     it('User invalid password length', async () => {
-        const response = await supertest(server)
+        const response = await supertest(app)
             .post('/singup')
             .send({email: 'test', password: '12345'});
 
@@ -34,7 +22,7 @@ describe('Create user test', () => {
     });
 
     it('User ok', async () => {
-        const response = await supertest(server)
+        const response = await supertest(app)
             .post('/singup')
             .send({email: 'test', password: '123456'});
 
@@ -43,7 +31,7 @@ describe('Create user test', () => {
     });
 
     it('User already exists', async () => {
-        const response = await supertest(server)
+        const response = await supertest(app)
             .post('/singup')
             .send({email: 'test', password: '123456'});
 
@@ -64,7 +52,7 @@ describe('Login', () => {
     });
 
     it('Missing data (email/pass)', async () => {
-        const response = await supertest(server).post('/login');
+        const response = await supertest(app).post('/login');
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
@@ -72,7 +60,7 @@ describe('Login', () => {
     });
 
     it('User not found', async () => {
-        const response = await supertest(server)
+        const response = await supertest(app)
             .post('/login')
             .send({email: 'not_found', password: '123456'});
 
@@ -82,7 +70,7 @@ describe('Login', () => {
     });
 
     it('User login ok', async () => {
-        const response = await supertest(server)
+        const response = await supertest(app)
             .post('/login')
             .send({email: 'user', password: '123456'});
 

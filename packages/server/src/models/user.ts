@@ -36,7 +36,7 @@ export const createToken = async (userInstance: UserInstance): Promise<string> =
 // TODO: validate user email
 const user = (sequelize: Sequelize.Sequelize) => {
     const attributes = {
-        id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
+        id: {type: Sequelize.UUID, primaryKey: true, unique: true, defaultValue: Sequelize.UUIDV4},
         email: {type: Sequelize.STRING, unique: true, allowNull: false, primaryKey: true},
         password: {
             type: Sequelize.STRING,

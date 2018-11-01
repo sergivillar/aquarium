@@ -7,6 +7,7 @@
         "initdb": "docker-compose up -d",
         "start": "nodemon index.ts --exec babel-node --extensions '.ts' index.ts",
         "check-types": "tsc",
+        "pretest": "NODE_ENV=test babel-node --extensions '.ts' ./src/utils/setupTest.ts",
         "test": "NODE_ENV=test jest",
         "lint": "node_modules/.bin/tslint -p ../../tsconfig.json"
     },
@@ -67,7 +68,7 @@
         "transform": {
             "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
         },
-        "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+        "testRegex": "(/__tests__/.*|\\.(test))\\.(ts|tsx|js)$",
         "verbose": false
     }
 }
