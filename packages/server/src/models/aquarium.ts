@@ -20,13 +20,13 @@ const aquarium = (sequelize: Sequelize.Sequelize) => {
         liters: {type: Sequelize.INTEGER},
     };
 
-    // @ts-ignore
     const Aquarium = sequelize.define<AquariumInstance, IAquariumAttributes>('aquariums', attributes, {
         freezeTableName: true,
     });
 
     Aquarium.associate = (models: any) => {
         Aquarium.belongsTo(models.User, {foreignKey: 'user_id'});
+        Aquarium.hasMany(models.Measure, {foreignKey: 'aquarium_id'});
     };
 
     return Aquarium;
