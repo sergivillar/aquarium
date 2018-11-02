@@ -49,7 +49,7 @@ passport.use(
 
                 const validate = await validatePassword(password, user.password);
                 if (!validate) {
-                    return done('Wrong password');
+                    return done('Wrong email or password');
                 }
 
                 return done(null, user);
