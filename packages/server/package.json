@@ -7,10 +7,10 @@
         "initdb": "docker-compose up -d",
         "start": "nodemon index.ts --exec babel-node --extensions '.ts' index.ts",
         "check-types": "tsc",
-        "pretest": "NODE_ENV=test babel-node --extensions '.ts' ./src/utils/setupTest.ts",
+        "pretest": "NODE_ENV=test babel-node --extensions '.ts' ./src/utils/setup-test.ts",
         "test": "NODE_ENV=test jest",
         "lint": "node_modules/.bin/tslint -p ../../tsconfig.json",
-        "generate-types": "gql-gen --require ts-node/register --schema ./src/schema.ts --template graphql-codegen-typescript-resolvers-template --out ./src/schema/schema.d.ts"
+        "generate-types": "gql-gen --require ts-node/register --schema ./src/graphql.ts --template graphql-codegen-typescript-template --out ./src/typings/types.d.ts"
     },
     "author": "",
     "license": "ISC",
@@ -35,7 +35,7 @@
         "babel-core": "^7.0.0-bridge",
         "babel-jest": "^23.6.0",
         "graphql-code-generator": "^0.13.0",
-        "graphql-codegen-typescript-resolvers-template": "^0.13.0",
+        "graphql-codegen-typescript-template": "^0.13.0",
         "graphql-tools": "^3.1.1",
         "jest": "^23.6.0",
         "nodemon": "^1.18.3",
