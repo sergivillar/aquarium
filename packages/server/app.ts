@@ -2,7 +2,7 @@ import express, {Request} from 'express';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import {ApolloServer} from 'apollo-server-express';
-import {schema} from './src/schema';
+import schema from './src/graphql';
 import routes from './src/routes';
 import {errorMiddleware} from './src/utils/middleware';
 import APIError from './src/errors';
