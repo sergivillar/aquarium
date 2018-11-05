@@ -13,7 +13,9 @@ const addAquariumMutation = (variables?: {}) => ({
                 id
                 name
                 liters
-                user_id
+                user {
+                    id
+                }
             }
         }`,
     variables,
@@ -46,7 +48,7 @@ describe('Create aquarium to a user', () => {
         const liters = 100;
 
         const expectResult = {
-            data: {addAquarium: {name, liters, user_id: user.id}},
+            data: {addAquarium: {name, liters, user: {id: user.id}}},
         };
 
         const response = await supertest(app)
