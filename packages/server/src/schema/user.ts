@@ -4,7 +4,7 @@ export default gql`
     type User {
         id: ID!
         email: String!
-        aquariums: [Aquarium]
+        aquariums: [Aquarium]!
         createdAt: String
     }
 

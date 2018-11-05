@@ -12,7 +12,12 @@ export default gql`
         calcium: Int!
         magnesium: Int!
         silicate: Int!
+        aquarium: Aquarium!
         createdAt: String
+    }
+
+    extend type Query {
+        getMeasures(id: ID!): [Measure]!
     }
 
     extend type Mutation {

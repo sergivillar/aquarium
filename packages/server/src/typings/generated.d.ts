@@ -14,6 +14,8 @@ export interface Query {
     me?: User | null;
 
     aquariums?: (Aquarium | null)[] | null;
+
+    getMeasures: (Measure | null)[];
 }
 
 export interface User {
@@ -21,7 +23,7 @@ export interface User {
 
     email: string;
 
-    aquariums?: (Aquarium | null)[] | null;
+    aquariums: (Aquarium | null)[];
 
     createdAt?: string | null;
 }
@@ -33,17 +35,9 @@ export interface Aquarium {
 
     liters: number;
 
-    user_id: string;
+    user: User;
 
     createdAt?: string | null;
-}
-
-export interface Mutation {
-    _?: boolean | null;
-
-    addAquarium?: Aquarium | null;
-
-    addMeasure?: Measure | null;
 }
 
 export interface Measure {
@@ -67,7 +61,17 @@ export interface Measure {
 
     silicate: number;
 
+    aquarium_id: string;
+
     createdAt?: string | null;
+}
+
+export interface Mutation {
+    _?: boolean | null;
+
+    addAquarium?: Aquarium | null;
+
+    addMeasure?: Measure | null;
 }
 
 // ====================================================
@@ -76,6 +80,9 @@ export interface Measure {
 
 export interface MeQueryArgs {
     email?: string | null;
+}
+export interface GetMeasuresQueryArgs {
+    id: string;
 }
 export interface AddAquariumMutationArgs {
     name: string;

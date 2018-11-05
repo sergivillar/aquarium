@@ -5,7 +5,7 @@ export default gql`
         id: ID!
         name: String!
         liters: Int!
-        user_id: ID!
+        user: User!
         createdAt: String
     }
 

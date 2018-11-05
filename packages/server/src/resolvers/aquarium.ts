@@ -13,4 +13,7 @@ export default {
         ): Promise<AquariumInstance> =>
             (await models.Aquarium.create({name, liters, user_id: user.id})) as AquariumInstance,
     },
+    Aquarium: {
+        user: async (aquarium: AquariumInstance) => await models.User.findById(aquarium.user_id),
+    },
 };

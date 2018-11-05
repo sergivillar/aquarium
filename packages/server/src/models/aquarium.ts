@@ -4,6 +4,7 @@ export interface IAquariumAttributes {
     id?: string;
     name: string;
     liters: number;
+    user_id?: string;
     createdAt?: string;
     updatedAt?: string;
 }
