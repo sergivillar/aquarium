@@ -1,7 +1,7 @@
 import models from '../models';
 import {UserInstance} from '../models/user';
 import {AquariumInstance} from '../models/aquarium';
-import {AddAquariumMutationArgs} from '../typings/types';
+import {AddAquariumMutationArgs} from '../typings/generated';
 
 export default {
     Mutation: {
