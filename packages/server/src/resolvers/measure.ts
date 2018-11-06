@@ -13,14 +13,15 @@ export default {
             (await models.Measure.findAll({where: {aquarium_id: id, user_id: user.id}})) as MeasureInstance[],
     },
     Mutation: {
-        addMeasure: async (
-            _: any,
-            args: AddMeasureMutationArgs | any,
-            {user}: {user: UserInstance}
-        ): Promise<MeasureInstance> =>
+        addMeasure: async (_: any, args: AddMeasureMutationArgs | any): Promise<MeasureInstance> =>
             (await models.Measure.create({
                 ...args,
-                user_id: user.id,
+                aquarium_id: args.aquariumId,
             })) as MeasureInstance,
+    },
+    Measure: {
+        aquarium: (measure: MeasureInstance) => {
+            models.Aquarium.findById(measure.aquarium_id);
+        },
     },
 };

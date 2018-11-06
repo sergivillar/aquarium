@@ -13,6 +13,7 @@ export interface IMeasureAttributes {
     silicate: number;
     createdAt?: string;
     updatedAt?: string;
+    aquarium_id?: string;
 }
 
 export type MeasureInstance = Sequelize.Instance<IMeasureAttributes> & IMeasureAttributes;
