@@ -2,6 +2,10 @@ import supertest from 'supertest';
 import models from '../models';
 import app from '../../app';
 
+afterAll(async () => {
+    await models.User.truncate({cascade: true});
+});
+
 describe('Create user test', () => {
     it('Missing data (email/pass)', async () => {
         const response = await supertest(app).post('/singup');

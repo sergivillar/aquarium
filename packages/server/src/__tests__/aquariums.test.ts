@@ -29,6 +29,11 @@ beforeAll(async () => {
     token = await createToken(user);
 });
 
+afterAll(async () => {
+    await models.User.truncate({cascade: true});
+    await models.Aquarium.truncate({cascade: true});
+});
+
 describe('Create aquarium to a user', () => {
     it('Unauthenticated user', async () => {
         const expectResult = {
