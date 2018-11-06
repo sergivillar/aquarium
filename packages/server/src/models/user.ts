@@ -54,7 +54,7 @@ const user = (sequelize: Sequelize.Sequelize) => {
     });
 
     User.associate = (models: any) => {
-        User.hasMany(models.Aquarium, {foreignKey: 'user_id'});
+        User.hasMany(models.Aquarium, {foreignKey: 'userId'});
     };
 
     return User;

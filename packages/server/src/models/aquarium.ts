@@ -4,7 +4,7 @@ export interface IAquariumAttributes {
     id?: string;
     name: string;
     liters: number;
-    user_id?: string;
+    userId?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -26,8 +26,8 @@ const aquarium = (sequelize: Sequelize.Sequelize) => {
     });
 
     Aquarium.associate = (models: any) => {
-        Aquarium.belongsTo(models.User, {foreignKey: 'user_id'});
-        Aquarium.hasMany(models.Measure, {foreignKey: 'aquarium_id'});
+        Aquarium.belongsTo(models.User, {foreignKey: 'userId'});
+        Aquarium.hasMany(models.Measure, {foreignKey: 'aquariumId'});
     };
 
     return Aquarium;

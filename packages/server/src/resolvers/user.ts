@@ -8,7 +8,7 @@ export default {
     User: {
         aquariums: async ({id}: UserInstance) =>
             await models.Aquarium.findAll({
-                where: {user_id: id},
+                where: {userId: id},
             }),
     },
 };

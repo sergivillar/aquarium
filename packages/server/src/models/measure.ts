@@ -13,7 +13,7 @@ export interface IMeasureAttributes {
     silicate: number;
     createdAt?: string;
     updatedAt?: string;
-    aquarium_id?: string;
+    aquariumId?: string;
 }
 
 export type MeasureInstance = Sequelize.Instance<IMeasureAttributes> & IMeasureAttributes;
@@ -38,7 +38,7 @@ const measure = (sequelize: Sequelize.Sequelize) => {
     });
 
     Measure.associate = (models: any) => {
-        Measure.belongsTo(models.Aquarium, {foreignKey: 'aquarium_id'});
+        Measure.belongsTo(models.Aquarium, {foreignKey: 'aquariumId'});
     };
 
     return Measure;

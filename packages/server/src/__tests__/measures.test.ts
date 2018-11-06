@@ -8,12 +8,11 @@ let token: string;
 
 const addAquariumMutation = (variables?: {}) => ({
     query: `
-        mutation ($name: String!, $liters: Int!) {
-            addAquarium(name: $name, liters: $liters) {
+        mutation ($aquariumId: Int!, $liters: Int!) {
+            addMeasure(aquariumId: $name, liters: $liters) {
                 id
-                name
                 liters
-                user {
+                aquarium {
                     id
                 }
             }
@@ -23,7 +22,7 @@ const addAquariumMutation = (variables?: {}) => ({
 
 beforeAll(async () => {
     user = (await models.User.create({
-        email: 'email2@test.com',
+        email: 'email@test.com',
         password: '123456',
     })) as UserInstance;
     token = await createToken(user);
@@ -32,45 +31,19 @@ beforeAll(async () => {
 afterAll(async () => {
     await models.User.truncate({cascade: true});
     // await models.Aquarium.truncate({cascade: true});
+    // await models.Measure.truncate({cascade: true});
 });
 
-describe('Create aquarium to a user', () => {
+describe('Create measure to an aquarium', () => {
     it('Unauthenticated user', async () => {
         const expectResult = {
             message: 'No auth token',
         };
-
         const response = await supertest(app)
             .post('/graphql')
             .send(addAquariumMutation());
 
         expect(response.status).toBe(401);
         expect(response.body).toMatchObject(expectResult);
-    });
-
-    it('Name and liters ok', async () => {
-        const name = 'aquarium';
-        const liters = 100;
-
-        const expectResult = {
-            data: {addAquarium: {name, liters, user: {id: user.id}}},
-        };
-
-        const response = await supertest(app)
-            .post('/graphql')
-            .set('Authorization', 'Bearer ' + token)
-            .send(addAquariumMutation({name, liters}));
-
-        expect(response.status).toBe(200);
-        expect(response.body).toMatchObject(expectResult);
-    });
-
-    it('No name', async () => {
-        const response = await supertest(app)
-            .post('/graphql')
-            .set('Authorization', 'Bearer ' + token)
-            .send(addAquariumMutation({name: null, liters: 100}));
-
-        expect(response.status).toBe(400);
     });
 });

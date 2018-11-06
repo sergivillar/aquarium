@@ -15,11 +15,11 @@ export default {
             {user}: {user: UserInstance}
         ): AquariumInstance => {
             // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28067
-            return models.Aquarium.create({name, liters, user_id: user.id}) as AquariumInstance;
+            return models.Aquarium.create({name, liters, userId: user.id}) as AquariumInstance;
         },
     },
     Aquarium: {
-        user: (aquarium: AquariumInstance) => models.User.findById(aquarium.user_id),
-        measures: (aquarium: AquariumInstance) => models.Measure.findAll({where: {aquarium_id: aquarium.id}}),
+        user: (aquarium: AquariumInstance) => models.User.findById(aquarium.userId),
+        measures: (aquarium: AquariumInstance) => models.Measure.findAll({where: {aquariumId: aquarium.id}}),
     },
 };
