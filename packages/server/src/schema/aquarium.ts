@@ -6,11 +6,12 @@ export default gql`
         name: String!
         liters: Int!
         user: User!
+        measures: [Measure!]
         createdAt: String
     }
 
     extend type Query {
-        aquariums: [Aquarium]
+        aquarium(id: ID!): Aquarium!
     }
 
     extend type Mutation {

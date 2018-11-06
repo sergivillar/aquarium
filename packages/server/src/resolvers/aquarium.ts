@@ -1,19 +1,25 @@
 import models from '../models';
 import {UserInstance} from '../models/user';
 import {AquariumInstance} from '../models/aquarium';
-import {AddAquariumMutationArgs} from '../typings/generated';
+import {AddAquariumMutationArgs, AquariumQueryArgs} from '../typings/generated';
 
 export default {
+    Query: {
+        aquarium: (_: any, {id}: AquariumQueryArgs | any) => models.Aquarium.findById(id),
+    },
     Mutation: {
-        addAquarium: async (
+        addAquarium: (
             _: any,
             // https://github.com/apollographql/graphql-tools/issues/704
             {name, liters}: AddAquariumMutationArgs | any,
             {user}: {user: UserInstance}
-        ): Promise<AquariumInstance> =>
-            (await models.Aquarium.create({name, liters, user_id: user.id})) as AquariumInstance,
+        ): AquariumInstance => {
+            // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28067
+            return models.Aquarium.create({name, liters, user_id: user.id}) as AquariumInstance;
+        },
     },
     Aquarium: {
-        user: async (aquarium: AquariumInstance) => await models.User.findById(aquarium.user_id),
+        user: (aquarium: AquariumInstance) => models.User.findById(aquarium.user_id),
+        measures: (aquarium: AquariumInstance) => models.Measure.findAll({where: {aquarium_id: aquarium.id}}),
     },
 };

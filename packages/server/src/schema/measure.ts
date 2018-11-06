@@ -31,6 +31,7 @@ export default gql`
             calcium: Int
             magnesium: Int
             silicate: Int
-        ): Measure
+            aquariumId: ID!
+        ): Measure!
     }
 `;
