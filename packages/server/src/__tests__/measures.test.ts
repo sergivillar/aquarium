@@ -2,6 +2,7 @@ import supertest from 'supertest';
 import models from '../models';
 import app from '../../app';
 import {UserInstance, createToken} from '../models/user';
+import {sequelize} from '../models';
 
 let user: UserInstance;
 let token: string;
@@ -30,8 +31,9 @@ beforeAll(async () => {
 
 afterAll(async () => {
     await models.User.truncate({cascade: true});
-    // await models.Aquarium.truncate({cascade: true});
-    // await models.Measure.truncate({cascade: true});
+    await models.Aquarium.truncate({cascade: true});
+    await models.Measure.truncate({cascade: true});
+    await sequelize.close();
 });
 
 describe('Create measure to an aquarium', () => {
