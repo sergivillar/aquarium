@@ -21,7 +21,7 @@ export default gql`
     }
 
     extend type Mutation {
-        addMeasure(
+        createMeasure(
             temperature: Int
             salinity: Int
             nitrite: Int

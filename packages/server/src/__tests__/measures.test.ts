@@ -9,10 +9,10 @@ let user: UserInstance;
 let aquarium: AquariumInstance;
 let token: string;
 
-const addMeasureMutation = (variables?: {}) => ({
+const createMeasureMutation = (variables?: {}) => ({
     query: `
         mutation ($aquariumId: ID!, $phosphate: Int!) {
-            addMeasure(aquariumId: $aquariumId, phosphate: $phosphate) {
+            createMeasure(aquariumId: $aquariumId, phosphate: $phosphate) {
                 phosphate
                 aquarium {
                     id
@@ -47,7 +47,7 @@ describe('Create measure to an aquarium', () => {
         const expectPhospate = 10;
         const expectResult = {
             data: {
-                addMeasure: {
+                createMeasure: {
                     phosphate: expectPhospate,
                     aquarium: {
                         id: aquarium.id,
@@ -59,7 +59,7 @@ describe('Create measure to an aquarium', () => {
         const response = await supertest(app)
             .post('/graphql')
             .set('Authorization', 'Bearer ' + token)
-            .send(addMeasureMutation({aquariumId: aquarium.id, phosphate: expectPhospate}));
+            .send(createMeasureMutation({aquariumId: aquarium.id, phosphate: expectPhospate}));
 
         expect(response.status).toBe(200);
         expect(response.body).toMatchObject(expectResult);

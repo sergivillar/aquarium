@@ -1,7 +1,7 @@
 import models from '../../models';
 import {UserInstance} from '../../models/user';
 import {MeasureInstance} from '../../models/measure';
-import {AddMeasureMutationArgs, GetMeasuresQueryArgs} from '../../typings/generated';
+import {CreateMeasureMutationArgs, GetMeasuresQueryArgs} from '../../typings/generated';
 
 export default {
     Query: {
@@ -13,7 +13,7 @@ export default {
             (await models.Measure.findAll({where: {aquariumId: id, userId: user.id}})) as MeasureInstance[],
     },
     Mutation: {
-        addMeasure: async (_: any, args: AddMeasureMutationArgs | any): Promise<MeasureInstance> =>
+        createMeasure: async (_: any, args: CreateMeasureMutationArgs | any): Promise<MeasureInstance> =>
             (await models.Measure.create(args)) as MeasureInstance,
     },
     Measure: {

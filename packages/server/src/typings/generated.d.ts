@@ -71,9 +71,9 @@ export interface Measure {
 export interface Mutation {
     _?: boolean | null;
 
-    addAquarium?: Aquarium | null;
+    createAquarium?: Aquarium | null;
 
-    addMeasure: Measure;
+    createMeasure: Measure;
 }
 
 // ====================================================
@@ -89,12 +89,12 @@ export interface AquariumQueryArgs {
 export interface GetMeasuresQueryArgs {
     id: string;
 }
-export interface AddAquariumMutationArgs {
+export interface CreateAquariumMutationArgs {
     name: string;
 
     liters: number;
 }
-export interface AddMeasureMutationArgs {
+export interface CreateMeasureMutationArgs {
     temperature?: number | null;
 
     salinity?: number | null;

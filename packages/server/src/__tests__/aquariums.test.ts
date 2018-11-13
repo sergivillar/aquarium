@@ -7,10 +7,10 @@ import {sequelize} from '../models';
 let user: UserInstance;
 let token: string;
 
-const addAquariumMutation = (variables?: {}) => ({
+const createAquariumMutation = (variables?: {}) => ({
     query: `
         mutation ($name: String!, $liters: Int!) {
-            addAquarium(name: $name, liters: $liters) {
+            createAquarium(name: $name, liters: $liters) {
                 id
                 name
                 liters
@@ -44,7 +44,7 @@ describe('Create aquarium to a user', () => {
 
         const response = await supertest(app)
             .post('/graphql')
-            .send(addAquariumMutation());
+            .send(createAquariumMutation());
 
         expect(response.status).toBe(401);
         expect(response.body).toMatchObject(expectResult);
@@ -55,13 +55,13 @@ describe('Create aquarium to a user', () => {
         const liters = 100;
 
         const expectResult = {
-            data: {addAquarium: {name, liters, user: {id: user.id}}},
+            data: {createAquarium: {name, liters, user: {id: user.id}}},
         };
 
         const response = await supertest(app)
             .post('/graphql')
             .set('Authorization', 'Bearer ' + token)
-            .send(addAquariumMutation({name, liters}));
+            .send(createAquariumMutation({name, liters}));
 
         expect(response.status).toBe(200);
         expect(response.body).toMatchObject(expectResult);
@@ -71,7 +71,7 @@ describe('Create aquarium to a user', () => {
         const response = await supertest(app)
             .post('/graphql')
             .set('Authorization', 'Bearer ' + token)
-            .send(addAquariumMutation({name: null, liters: 100}));
+            .send(createAquariumMutation({name: null, liters: 100}));
 
         expect(response.status).toBe(400);
     });

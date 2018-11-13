@@ -15,6 +15,6 @@ export default gql`
     }
 
     extend type Mutation {
-        addAquarium(name: String!, liters: Int!): Aquarium
+        createAquarium(name: String!, liters: Int!): Aquarium
     }
 `;
