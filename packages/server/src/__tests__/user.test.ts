@@ -8,8 +8,8 @@ afterAll(async () => {
     await sequelize.close();
 });
 
-describe.only('Create user test', () => {
-    it.only('Missing data (email/pass)', async () => {
+describe('Create user test', () => {
+    it('Missing data (email/pass)', async () => {
         const response = await supertest(app).post('/singup');
 
         expect(response.status).toBe(400);

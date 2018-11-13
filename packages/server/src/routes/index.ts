@@ -27,7 +27,7 @@ router.post('/login', (req: Request, res: Response, next) => {
     })(req, res);
 });
 
-router.post('/graphql', (req, res, next) => {
+router.use('/graphql', (req, res, next) => {
     passport.authenticate('jwt', {session: false}, (err, user, info) => {
         if (err || info) {
             return next(new APIError(err || info.message || info, 401));

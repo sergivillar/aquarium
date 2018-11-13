@@ -1,18 +1,19 @@
 import supertest from 'supertest';
 import models from '../models';
 import app from '../../app';
-import {UserInstance, createToken} from '../models/user';
 import {sequelize} from '../models';
+import {UserInstance, createToken} from '../models/user';
+import {AquariumInstance} from '../models/aquarium';
 
 let user: UserInstance;
+let aquarium: AquariumInstance;
 let token: string;
 
-const addAquariumMutation = (variables?: {}) => ({
+const addMeasureMutation = (variables?: {}) => ({
     query: `
-        mutation ($aquariumId: Int!, $liters: Int!) {
-            addMeasure(aquariumId: $name, liters: $liters) {
-                id
-                liters
+        mutation ($aquariumId: ID!, $phosphate: Int!) {
+            addMeasure(aquariumId: $aquariumId, phosphate: $phosphate) {
+                phosphate
                 aquarium {
                     id
                 }
@@ -26,6 +27,11 @@ beforeAll(async () => {
         email: 'email@test.com',
         password: '123456',
     })) as UserInstance;
+    aquarium = (await models.Aquarium.create({
+        userId: user.id,
+        name: 'Test',
+        liters: 100,
+    })) as AquariumInstance;
     token = await createToken(user);
 });
 
@@ -37,15 +43,25 @@ afterAll(async () => {
 });
 
 describe('Create measure to an aquarium', () => {
-    it('Unauthenticated user', async () => {
+    it('Measure create ok', async () => {
+        const expectPhospate = 10;
         const expectResult = {
-            message: 'No auth token',
+            data: {
+                addMeasure: {
+                    phosphate: expectPhospate,
+                    aquarium: {
+                        id: aquarium.id,
+                    },
+                },
+            },
         };
+
         const response = await supertest(app)
             .post('/graphql')
-            .send(addAquariumMutation());
+            .set('Authorization', 'Bearer ' + token)
+            .send(addMeasureMutation({aquariumId: aquarium.id, phosphate: expectPhospate}));
 
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(200);
         expect(response.body).toMatchObject(expectResult);
     });
 });

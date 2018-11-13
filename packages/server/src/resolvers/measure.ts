@@ -17,8 +17,6 @@ export default {
             (await models.Measure.create(args)) as MeasureInstance,
     },
     Measure: {
-        aquarium: (measure: MeasureInstance) => {
-            models.Aquarium.findById(measure.aquariumId);
-        },
+        aquarium: (measure: MeasureInstance) => models.Aquarium.findById(measure.aquariumId),
     },
 };
