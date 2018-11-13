@@ -1,5 +1,5 @@
 import {sequelize} from './src/models';
-import app from './app';
+import app from './src';
 
 // TODO: only force if dev mode
 sequelize.sync({force: false}).then(() => {

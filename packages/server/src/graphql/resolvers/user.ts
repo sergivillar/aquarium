@@ -1,5 +1,5 @@
-import models from '../models';
-import {UserInstance} from '../models/user';
+import models from '../../models';
+import {UserInstance} from '../../models/user';
 
 export default {
     Query: {

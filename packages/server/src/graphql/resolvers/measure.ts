@@ -1,7 +1,7 @@
-import models from '../models';
-import {UserInstance} from '../models/user';
-import {MeasureInstance} from '../models/measure';
-import {AddMeasureMutationArgs, GetMeasuresQueryArgs} from '../typings/generated';
+import models from '../../models';
+import {UserInstance} from '../../models/user';
+import {MeasureInstance} from '../../models/measure';
+import {AddMeasureMutationArgs, GetMeasuresQueryArgs} from '../../typings/generated';
 
 export default {
     Query: {

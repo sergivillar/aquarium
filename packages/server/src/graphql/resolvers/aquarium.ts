@@ -1,7 +1,7 @@
-import models from '../models';
-import {UserInstance} from '../models/user';
-import {AquariumInstance} from '../models/aquarium';
-import {AddAquariumMutationArgs, AquariumQueryArgs} from '../typings/generated';
+import models from '../../models';
+import {UserInstance} from '../../models/user';
+import {AquariumInstance} from '../../models/aquarium';
+import {AddAquariumMutationArgs, AquariumQueryArgs} from '../../typings/generated';
 
 export default {
     Query: {
