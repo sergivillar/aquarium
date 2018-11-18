@@ -5,6 +5,9 @@ import {CreateMeasureMutationArgs, GetMeasuresQueryArgs} from '../../typings/gen
 
 import {MeasurePaginated, Measure} from '../../typings/generated';
 
+const toCursorHash = (value: string) => Buffer.from(value).toString('base64');
+const fromCursorHash = (value: string) => Buffer.from(value, 'base64').toString('ascii');
+
 export default {
     Query: {
         getMeasures: async (
@@ -16,7 +19,7 @@ export default {
                 limit: limit + 1,
                 where: {
                     aquariumId,
-                    ...(cursor && {createdAt: {[Sequelize.Op.lt]: cursor}}),
+                    ...(cursor && {createdAt: {[Sequelize.Op.lt]: fromCursorHash(cursor)}}),
                 },
             })) as Measure[];
 
@@ -28,7 +31,7 @@ export default {
                 measures: result,
                 pageInfo: {
                     hasNextPage,
-                    endCursor: nextTimestamp && new Date(nextTimestamp).toISOString(),
+                    endCursor: nextTimestamp && toCursorHash(new Date(nextTimestamp).toISOString()),
                 },
             };
         },
