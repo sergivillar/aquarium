@@ -20,6 +20,7 @@ export default {
     },
     Aquarium: {
         user: (aquarium: AquariumInstance) => models.User.findById(aquarium.userId),
-        measures: (aquarium: AquariumInstance) => models.Measure.findAll({where: {aquariumId: aquarium.id}}),
+        // TODO: Maybe I can create a Context interface to get all types from there
+        measures: (aquarium: AquariumInstance, _: any, {loaders}: any) => loaders.measure.load(aquarium.id),
     },
 };

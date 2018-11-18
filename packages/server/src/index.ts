@@ -1,10 +1,14 @@
 import express, {Request} from 'express';
 import dotenv from 'dotenv';
 import passport from 'passport';
+import DataLoader from 'dataloader';
 import {ApolloServer} from 'apollo-server-express';
 import schema from './graphql';
 import routes from './routes';
 import {errorMiddleware} from './utils/middleware';
+import loaders from './graphql/loaders';
+import models from './models';
+import {MeasureInstance} from './models/measure';
 
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config();
@@ -24,6 +28,11 @@ const apolloServer = new ApolloServer({
     schema,
     context: ({req}: {req: Request}) => ({
         user: req.user,
+        loaders: {
+            measure: new DataLoader<string, MeasureInstance[]>(keys =>
+                loaders.measure.batchMeasures(keys, models)
+            ),
+        },
     }),
 });
 
