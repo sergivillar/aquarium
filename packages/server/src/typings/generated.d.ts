@@ -15,7 +15,7 @@ export interface Query {
 
     aquarium: Aquarium;
 
-    getMeasures: (Measure | null)[];
+    getMeasures: MeasurePaginated;
 }
 
 export interface User {
@@ -68,6 +68,18 @@ export interface Measure {
     createdAt?: string | null;
 }
 
+export interface MeasurePaginated {
+    measures: (Measure | null)[];
+
+    pageInfo: PageInfo;
+}
+
+export interface PageInfo {
+    hasNextPage: boolean;
+
+    endCursor?: string | null;
+}
+
 export interface Mutation {
     _?: boolean | null;
 
@@ -87,7 +99,11 @@ export interface AquariumQueryArgs {
     id: string;
 }
 export interface GetMeasuresQueryArgs {
-    id: string;
+    aquariumId: string;
+
+    cursor?: string | null;
+
+    limit?: number | null;
 }
 export interface CreateAquariumMutationArgs {
     name: string;

@@ -16,8 +16,18 @@ export default gql`
         createdAt: String
     }
 
+    type PageInfo {
+        hasNextPage: Boolean!
+        endCursor: String
+    }
+
+    type MeasurePaginated {
+        measures: [Measure]!
+        pageInfo: PageInfo!
+    }
+
     extend type Query {
-        getMeasures(id: ID!): [Measure]!
+        getMeasures(aquariumId: ID!, cursor: String, limit: Int): MeasurePaginated!
     }
 
     extend type Mutation {
