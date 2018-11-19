@@ -1,7 +1,7 @@
 import {MeasureInstance} from '../../models/measure';
-import {IModels} from '../../models';
+import {Models} from '../../models';
 
-export const batchMeasures = async (keys: string[], models: IModels) => {
+export const batchMeasures = async (keys: string[], models: Models) => {
     const measures = (await models.Measure.findAll({
         where: {
             aquariumId: keys,

@@ -12,12 +12,7 @@ const models = {
     Aquarium: sequelize.import('./aquarium'),
     Measure: sequelize.import('./measure'),
 };
-
-export interface IModels {
-    User: typeof models.User;
-    Aquarium: typeof models.Aquarium;
-    Measure: typeof models.Measure;
-}
+export type Models = typeof models;
 
 Object.values(models).forEach((model: any) => {
     if (model.associate) {
