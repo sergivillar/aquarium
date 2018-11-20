@@ -45,23 +45,23 @@ export interface Aquarium {
 export interface Measure {
     id: string;
 
-    temperature: number;
+    temperature?: number | null;
 
-    salinity: number;
+    salinity?: number | null;
 
-    nitrite: number;
+    nitrite?: number | null;
 
-    nitrate: number;
+    nitrate?: number | null;
 
-    phosphate: number;
+    phosphate?: number | null;
 
-    alkalinity: number;
+    alkalinity?: number | null;
 
-    calcium: number;
+    calcium?: number | null;
 
-    magnesium: number;
+    magnesium?: number | null;
 
-    silicate: number;
+    silicate?: number | null;
 
     aquarium: Aquarium;
 
@@ -69,7 +69,7 @@ export interface Measure {
 }
 
 export interface MeasurePaginated {
-    measures: (Measure | null)[];
+    measures: Measure[];
 
     pageInfo: PageInfo;
 }

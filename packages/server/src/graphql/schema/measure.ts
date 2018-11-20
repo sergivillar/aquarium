@@ -22,7 +22,7 @@ export default gql`
     }
 
     type MeasurePaginated {
-        measures: [Measure]!
+        measures: [Measure!]!
         pageInfo: PageInfo!
     }
 

@@ -2,15 +2,15 @@ import * as Sequelize from 'sequelize';
 
 export interface IMeasureAttributes {
     id?: string;
-    temperature: number;
-    salinity: number;
-    nitrite: number;
-    nitrate: number;
-    phosphate: number;
-    alkalinity: number;
-    calcium: number;
-    magnesium: number;
-    silicate: number;
+    temperature?: number;
+    salinity?: number;
+    nitrite?: number;
+    nitrate?: number;
+    phosphate?: number;
+    alkalinity?: number;
+    calcium?: number;
+    magnesium?: number;
+    silicate?: number;
     createdAt?: string;
     updatedAt?: string;
     aquariumId?: string;

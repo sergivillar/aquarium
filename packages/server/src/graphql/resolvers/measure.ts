@@ -14,24 +14,29 @@ export default {
             _: any,
             {aquariumId, cursor, limit = 5}: GetMeasuresQueryArgs | any
         ): Promise<MeasurePaginated> => {
-            const measures = (await models.Measure.findAll({
+            const measures = ((await models.Measure.findAll({
                 order: [['createdAt', 'DESC']],
                 limit: limit + 1,
                 where: {
                     aquariumId,
                     ...(cursor && {createdAt: {[Sequelize.Op.lt]: fromCursorHash(cursor)}}),
                 },
-            })) as Measure[];
+            })) as any) as Measure[];
 
             const hasNextPage = measures.length > limit;
             const result = hasNextPage ? measures.slice(0, -1) : measures;
-            const nextTimestamp = result[result.length - 1].createdAt;
+
+            if (result.length === 0) {
+                return {measures: [], pageInfo: {hasNextPage: false}};
+            }
+
+            const nextTimestamp = hasNextPage && result[result.length - 1].createdAt;
 
             return {
                 measures: result,
                 pageInfo: {
                     hasNextPage,
-                    endCursor: nextTimestamp && toCursorHash(new Date(nextTimestamp).toISOString()),
+                    ...(nextTimestamp && {endCursor: toCursorHash(new Date(nextTimestamp).toISOString())}),
                 },
             };
         },
