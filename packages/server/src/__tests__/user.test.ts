@@ -4,11 +4,24 @@ import app from '..';
 import {sequelize} from '../models';
 
 afterAll(async () => {
-    await models.User.truncate({cascade: true});
     await sequelize.close();
 });
 
 describe('Create user test', () => {
+    const email = 'user@test.com';
+    const password = '123456';
+
+    beforeAll(async () => {
+        await models.User.create({
+            email,
+            password,
+        });
+    });
+
+    afterAll(async () => {
+        await models.User.truncate({cascade: true});
+    });
+
     it('Missing data (email/pass)', async () => {
         const response = await supertest(app).post('/singup');
 
@@ -20,7 +33,7 @@ describe('Create user test', () => {
     it('User invalid password length', async () => {
         const response = await supertest(app)
             .post('/singup')
-            .send({email: 'test', password: '12345'});
+            .send({email: 'test@test.com', password: '12345'});
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
@@ -30,7 +43,7 @@ describe('Create user test', () => {
     it('User ok', async () => {
         const response = await supertest(app)
             .post('/singup')
-            .send({email: 'test', password: '123456'});
+            .send({email: 'test_2@test.com', password: '123456'});
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('token');
@@ -39,7 +52,7 @@ describe('Create user test', () => {
     it('User already exists', async () => {
         const response = await supertest(app)
             .post('/singup')
-            .send({email: 'test', password: '123456'});
+            .send({email, password});
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
@@ -48,13 +61,18 @@ describe('Create user test', () => {
 });
 
 describe('Login', () => {
-    const email = 'user';
+    const email = 'user@test.com';
+    const password = '123456';
 
     beforeAll(async () => {
         await models.User.create({
             email,
-            password: '123456',
+            password,
         });
+    });
+
+    afterAll(async () => {
+        await models.User.truncate({cascade: true});
     });
 
     it('Missing data (email/pass)', async () => {
@@ -68,7 +86,7 @@ describe('Login', () => {
     it('User not found', async () => {
         const response = await supertest(app)
             .post('/login')
-            .send({email: 'not_found', password: '123456'});
+            .send({email: 'not_found@test.com', password: '123456'});
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
@@ -78,7 +96,7 @@ describe('Login', () => {
     it('User login ok', async () => {
         const response = await supertest(app)
             .post('/login')
-            .send({email: 'user', password: '123456'});
+            .send({email, password});
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('token');

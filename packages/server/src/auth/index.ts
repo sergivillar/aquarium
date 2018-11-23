@@ -1,6 +1,7 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import {ExtractJwt, Strategy as JwtStrategy} from 'passport-jwt';
+import validator from 'validator';
 import models from '../models';
 import {validatePassword, UserInstance} from '../models/user';
 
@@ -18,6 +19,14 @@ passport.use(
             password: string,
             done: (error: string | null, user?: UserInstance) => void
         ) => {
+            if (!validator.isEmail(email)) {
+                return done('Email has an invalid format');
+            }
+
+            if (password.length < 6 || password.length > 12) {
+                return done('Password length must be between 6 and 12');
+            }
+
             try {
                 if (await models.User.findOne({where: {email}})) {
                     return done('User already exists');
@@ -41,6 +50,10 @@ passport.use(
         },
         async (email, password, done) => {
             try {
+                if (!validator.isEmail(email)) {
+                    return done('Email has an invalid format');
+                }
+
                 const user = (await models.User.findOne({where: {email}})) as UserInstance;
 
                 if (!user) {
