@@ -16,6 +16,8 @@ describe('Test aquarium resolver', () => {
 
         expect(spy).toHaveBeenCalled();
         expect(respose).toMatchObject(aquarium);
+
+        spy.mockRestore();
     });
 
     it('Create empty name', () => {
@@ -28,5 +30,7 @@ describe('Test aquarium resolver', () => {
 
         expect(createAquarium).rejects.toThrow();
         expect(spy).not.toHaveBeenCalled();
+
+        spy.mockRestore();
     });
 });
