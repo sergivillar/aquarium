@@ -8,14 +8,17 @@ export default {
         aquarium: (_: any, {id}: AquariumQueryArgs | any) => models.Aquarium.findById(id),
     },
     Mutation: {
-        createAquarium: (
+        createAquarium: async (
             _: any,
             // https://github.com/apollographql/graphql-tools/issues/704
             {name, liters}: CreateAquariumMutationArgs | any,
             {user}: {user: UserInstance}
-        ): AquariumInstance => {
-            // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28067
-            return models.Aquarium.create({name, liters, userId: user.id}) as AquariumInstance;
+        ): Promise<AquariumInstance> => {
+            if (!name) {
+                throw new Error('Aquarium name can not be empty.');
+            }
+
+            return (await models.Aquarium.create({name, liters, userId: user.id})) as AquariumInstance;
         },
     },
     Aquarium: {

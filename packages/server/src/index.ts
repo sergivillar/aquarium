@@ -2,7 +2,7 @@ import express, {Request} from 'express';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import DataLoader from 'dataloader';
-import {ApolloServer} from 'apollo-server-express';
+import {ApolloServer, ApolloError} from 'apollo-server-express';
 import schema from './graphql';
 import routes from './routes';
 import {errorMiddleware} from './utils/middleware';
@@ -34,6 +34,12 @@ const apolloServer = new ApolloServer({
             ),
         },
     }),
+    formatError: (error: ApolloError) => {
+        if (process.env.NODE_ENV === 'production') {
+            delete error.extensions.exception;
+        }
+        return error;
+    },
 });
 
 apolloServer.applyMiddleware({app});

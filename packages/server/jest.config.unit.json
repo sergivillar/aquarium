@@ -1,0 +1,10 @@
+{
+    "moduleDirectories": ["./node_modules", "./src"],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
+    "transform": {
+        "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "verbose": false,
+    "testEnvironment": "node",
+    "testMatch": ["**/__tests__/**/*.test.ts"]
+}
