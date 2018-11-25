@@ -1,5 +1,8 @@
-import Sequelize from 'sequelize';
+// @ts-ignore
+// tslint:disable-next-line
+const Sequelize = require('sequelize');
 
+// @ts-ignore
 module.exports = {
     development: {
         username: 'postgres',

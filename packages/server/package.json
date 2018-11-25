@@ -7,7 +7,7 @@
         "initdb": "docker-compose up -d",
         "compile": "rm -rf build && babel --extensions '.ts,.js' src --out-dir build",
         "dev": "nodemon index.ts --exec babel-node --extensions '.ts' index.ts",
-        "start": "yarn compile && pm2 start ./dist/index.js --name server",
+        "start": "yarn compile && pm2 start ./build/index.js --name server",
         "check-types": "tsc",
         "preintegration-test": "NODE_ENV=test babel-node --extensions '.ts' ./src/utils/setup-test.ts",
         "integration-test": "NODE_ENV=test jest -c jest.config.integration.json --runInBand",
