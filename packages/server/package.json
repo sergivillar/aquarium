@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "initdb": "docker-compose up -d",
-        "start": "nodemon index.ts --exec babel-node --extensions '.ts' index.ts",
+        "compile": "rm -rf build && babel --extensions '.ts,.js' src --out-dir build",
+        "dev": "nodemon index.ts --exec babel-node --extensions '.ts' index.ts",
+        "start": "yarn compile && pm2 start ./dist/index.js --name server",
         "check-types": "tsc",
         "preintegration-test": "NODE_ENV=test babel-node --extensions '.ts' ./src/utils/setup-test.ts",
         "integration-test": "NODE_ENV=test jest -c jest.config.integration.json --runInBand",
@@ -14,7 +16,7 @@
         "lint": "node_modules/.bin/tslint -p ../../tsconfig.json",
         "generate-types": "gql-gen --require ts-node/register --schema ./src/graphql/index.ts --template graphql-codegen-typescript-template --out ./src/typings/generated.d.ts"
     },
-    "author": "",
+    "author": "Sergio Fernández",
     "license": "ISC",
     "devDependencies": {
         "@babel/cli": "^7.0.0",
