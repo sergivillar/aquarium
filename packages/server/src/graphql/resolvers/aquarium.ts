@@ -25,7 +25,7 @@ export default {
     Aquarium: {
         user: (aquarium: AquariumInstance) => models.User.findById(aquarium.userId),
         measures: (aquarium: AquariumInstance, _: any, {loaders}: IContext) =>
-            // @ts-ignore Id is always defined
+            // @ts-ignore aquarium.id is always defined
             loaders.measure.load(aquarium.id),
     },
 };
