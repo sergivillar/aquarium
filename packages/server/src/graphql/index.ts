@@ -1,4 +1,4 @@
-import {makeExecutableSchema} from 'graphql-tools';
+import {makeExecutableSchema} from 'apollo-server-express';
 import DataLoader from 'dataloader';
 import typeDefs from './schema';
 import resolvers from './resolvers';

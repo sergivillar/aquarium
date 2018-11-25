@@ -10,6 +10,8 @@ import loaders from './graphql/loaders';
 import models from './models';
 import {MeasureInstance} from './models/measure';
 import {IContext} from './graphql';
+// import typeDefs from './graphql/schema';
+// import resolvers from './graphql/resolvers';
 
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config();
