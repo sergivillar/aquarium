@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import models from '../../models';
 import {MeasureInstance} from '../../models/measure';
-import {CreateMeasureMutationArgs, GetMeasuresQueryArgs,PageInfo} from '../../typings/generated';
+import {CreateMeasureMutationArgs, GetMeasuresQueryArgs, PageInfo} from '../../typings/generated';
 
 const toCursorHash = (value: string) => Buffer.from(value).toString('base64');
 const fromCursorHash = (value: string) => Buffer.from(value, 'base64').toString('ascii');
@@ -11,7 +11,7 @@ export default {
         getMeasures: async (
             _: any,
             {aquariumId, cursor, limit = 5}: GetMeasuresQueryArgs | any
-        ): Promise<{measures: MeasureInstance[], pageInfo: PageInfo}> => {
+        ): Promise<{measures: MeasureInstance[]; pageInfo: PageInfo}> => {
             const measures = await models.Measure.findAll({
                 order: [['createdAt', 'DESC']],
                 limit: limit + 1,
