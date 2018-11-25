@@ -9,6 +9,7 @@ import {errorMiddleware} from './utils/middleware';
 import loaders from './graphql/loaders';
 import models from './models';
 import {MeasureInstance} from './models/measure';
+import {IContext} from './graphql';
 
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config();
@@ -26,7 +27,7 @@ app.use('/', routes);
 
 const apolloServer = new ApolloServer({
     schema,
-    context: ({req}: {req: Request}) => ({
+    context: ({req}: {req: Request}): IContext => ({
         user: req.user,
         loaders: {
             measure: new DataLoader<string, MeasureInstance[]>(keys =>

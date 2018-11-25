@@ -2,6 +2,7 @@ import models from '../../models';
 import {UserInstance} from '../../models/user';
 import {AquariumInstance} from '../../models/aquarium';
 import {CreateAquariumMutationArgs, AquariumQueryArgs} from '../../typings/generated';
+import {IContext} from '../';
 
 export default {
     Query: {
@@ -23,7 +24,8 @@ export default {
     },
     Aquarium: {
         user: (aquarium: AquariumInstance) => models.User.findById(aquarium.userId),
-        // TODO: Maybe I can create a Context interface to get all types from there
-        measures: (aquarium: AquariumInstance, _: any, {loaders}: any) => loaders.measure.load(aquarium.id),
+        measures: (aquarium: AquariumInstance, _: any, {loaders}: IContext) =>
+            // @ts-ignore Id is always defined
+            loaders.measure.load(aquarium.id),
     },
 };
