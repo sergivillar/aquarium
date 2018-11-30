@@ -6,6 +6,7 @@ export interface IUserAttributes {
     id?: string;
     email: string;
     password: string;
+    refreshToken?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -30,7 +31,37 @@ export const createToken = async (userInstance: UserInstance): Promise<string> =
         console.error('JWT Secret not defined');
     }
 
-    return await jwt.sign({id, email}, secret || 'secret');
+    return await jwt.sign({id, email}, secret || 'secret', {
+        expiresIn: Number(process.env.JWT_ACCESS_TOKEN_TTL),
+    });
+};
+
+export const createRefreshToken = async (userInstance: UserInstance): Promise<string> => {
+    const {id, email} = userInstance;
+
+    const secret = process.env.JWT_SECRET;
+
+    if (!secret) {
+        console.error('JWT Secret not defined');
+    }
+
+    const refreshToken = await jwt.sign({id, email}, secret || 'secret', {
+        expiresIn: Number(process.env.JWT_REFRESH_TOKEN_TTL),
+    });
+
+    await userInstance.update({refreshToken});
+
+    return refreshToken;
+};
+
+export const verifyToken = async (token: string) => {
+    const secret = process.env.JWT_SECRET;
+
+    if (!secret) {
+        console.error('JWT Secret not defined');
+    }
+
+    return await jwt.verify(token, process.env.SECRET || 'secret');
 };
 
 // TODO: validate user email
@@ -42,6 +73,7 @@ const user = (sequelize: Sequelize.Sequelize) => {
             type: Sequelize.STRING,
             validate: {len: {msg: 'Password length must be between 6 and 12', args: [6, 12]}},
         },
+        refreshToken: {type: Sequelize.STRING},
     };
 
     // @ts-ignore

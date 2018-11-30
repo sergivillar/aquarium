@@ -1,7 +1,8 @@
 import express, {Request, Response} from 'express';
 import passport from 'passport';
-import {createToken} from '../models/user';
+import {createToken, createRefreshToken, verifyToken} from '../models/user';
 import APIError from '../errors';
+import models from '../models';
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.post('/singup', (req: Request, res: Response, next) => {
         }
         return res.status(201).json({
             token: await createToken(user),
+            refreshToken: await createRefreshToken(user),
         });
     })(req, res);
 });
@@ -23,8 +25,38 @@ router.post('/login', (req: Request, res: Response, next) => {
         }
         return res.status(201).json({
             token: await createToken(user),
+            refreshToken: await createRefreshToken(user),
         });
     })(req, res);
+});
+
+router.post('/token', async (req: Request, res: Response, next) => {
+    const {email, refreshToken} = req.body;
+
+    if (!email || !refreshToken) {
+        return next(new APIError('No token or email to refresh token', 400));
+    }
+
+    try {
+        await verifyToken(refreshToken);
+    } catch (error) {
+        return next(new APIError('Refresh token expired. Please login again', 401));
+    }
+
+    let user;
+    try {
+        user = await models.User.findOne({where: {email, refreshToken}});
+    } catch (error) {
+        return next(new APIError('Token or email invalid. Please login again', 401));
+    }
+
+    if (!user) {
+        return next(new APIError('Token or email invalid. Please login again', 401));
+    }
+
+    return res.status(201).json({
+        token: await createToken(user),
+    });
 });
 
 router.use('/graphql', (req, res, next) => {

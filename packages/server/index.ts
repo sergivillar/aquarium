@@ -5,6 +5,6 @@ import app from './src';
 sequelize.sync({force: false}).then(() => {
     app.listen({port: 3000}, () => {
         // tslint:disable-next-line
-        console.log('🚀 Server ready at http://localhost:4000');
+        console.log('🚀 Server ready at http://localhost:3000');
     });
 });
