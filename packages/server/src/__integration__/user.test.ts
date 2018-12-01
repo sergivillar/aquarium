@@ -1,7 +1,11 @@
 import supertest from 'supertest';
+import {TokenExpiredError} from 'jsonwebtoken';
 import models from '../models';
 import app from '..';
 import {sequelize} from '../models';
+import {verifyToken} from '../models/user';
+
+const milisecondsToSeconds = (seconds: number) => seconds * 1000;
 
 afterAll(async () => {
     await sequelize.close();
@@ -100,5 +104,63 @@ describe('Login', () => {
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('token');
+    });
+});
+
+describe('Refresh token', () => {
+    const email = 'user@test.com';
+    const password = '123456';
+
+    beforeAll(async () => {
+        await models.User.create({
+            email,
+            password,
+        });
+    });
+
+    afterAll(async () => {
+        await models.User.truncate({cascade: true});
+    });
+
+    it('Token not expired', async () => {
+        const response = await supertest(app)
+            .post('/login')
+            .send({email: 'user@test.com', password: '123456'});
+
+        expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('token');
+        const token = response.body.token;
+
+        const currentDate = Date.now();
+        const tokenTTL = Number(process.env.JWT_ACCESS_TOKEN_TTL);
+
+        jest.spyOn(Date, 'now').mockImplementation(() => currentDate + milisecondsToSeconds(tokenTTL - 5));
+
+        const verify = verifyToken(token);
+
+        expect(verify).resolves.not.toThrow();
+
+        jest.restoreAllMocks();
+    });
+
+    it('Token expired', async () => {
+        const response = await supertest(app)
+            .post('/login')
+            .send({email: 'user@test.com', password: '123456'});
+
+        expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('token');
+        const token = response.body.token;
+
+        const currentDate = Date.now();
+        const tokenTTL = Number(process.env.JWT_ACCESS_TOKEN_TTL);
+
+        jest.spyOn(Date, 'now').mockImplementation(() => currentDate + milisecondsToSeconds(tokenTTL + 5));
+
+        const verify = verifyToken(token);
+
+        expect(verify).rejects.toThrowError(TokenExpiredError);
+
+        jest.restoreAllMocks();
     });
 });
