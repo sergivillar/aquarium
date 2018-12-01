@@ -1,51 +1,10 @@
-import express, {Request} from 'express';
-import dotenv from 'dotenv';
-import passport from 'passport';
-import DataLoader from 'dataloader';
-import {ApolloServer, ApolloError} from 'apollo-server-express';
-import schema from './graphql';
-import routes from './routes';
-import {errorMiddleware} from './utils/middleware';
-import loaders from './graphql/loaders';
-import models from './models';
-import {MeasureInstance} from './models/measure';
-import {IContext} from './graphql';
-// import typeDefs from './graphql/schema';
-// import resolvers from './graphql/resolvers';
+import {sequelize} from './models';
+import app from './app';
 
-if (process.env.NODE_ENV !== 'production') {
-    dotenv.config();
-}
-
-// tslint:disable-next-line
-require('./auth');
-
-const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(passport.initialize());
-app.use('/', routes);
-
-const apolloServer = new ApolloServer({
-    schema,
-    context: ({req}: {req: Request}): IContext => ({
-        user: req.user,
-        loaders: {
-            measure: new DataLoader<string, MeasureInstance[]>(keys =>
-                loaders.measure.batchMeasures(keys, models)
-            ),
-        },
-    }),
-    formatError: (error: ApolloError) => {
-        if (process.env.NODE_ENV === 'production') {
-            delete error.extensions.exception;
-        }
-        return error;
-    },
+// TODO: only force if dev mode
+sequelize.sync({force: false}).then(() => {
+    app.listen({port: 3000}, () => {
+        // tslint:disable-next-line
+        console.log('🚀 Server ready at http://localhost:3000');
+    });
 });
-
-apolloServer.applyMiddleware({app});
-app.use(errorMiddleware);
-
-export default app;

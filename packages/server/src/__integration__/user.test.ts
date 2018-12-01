@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import {TokenExpiredError} from 'jsonwebtoken';
 import models from '../models';
-import app from '..';
+import app from '../app';
 import {sequelize} from '../models';
 import {verifyToken} from '../models/user';
 

@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 import models from '../models';
-import app from '..';
+import app from '../app';
 import {sequelize} from '../models';
 import {UserInstance, createToken} from '../models/user';
 import {AquariumInstance} from '../models/aquarium';
