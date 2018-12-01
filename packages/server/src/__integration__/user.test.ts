@@ -163,4 +163,36 @@ describe('Refresh token', () => {
 
         jest.restoreAllMocks();
     });
+
+    it('Token expired and refresh token', async () => {
+        const responseLogin = await supertest(app)
+            .post('/login')
+            .send({email, password});
+
+        expect(responseLogin.status).toBe(201);
+        expect(responseLogin.body).toHaveProperty('token');
+        expect(responseLogin.body).toHaveProperty('refreshToken');
+        const {token, refreshToken} = responseLogin.body;
+
+        const currentDate = Date.now();
+        const tokenTTL = Number(process.env.JWT_ACCESS_TOKEN_TTL);
+
+        jest.spyOn(Date, 'now').mockImplementation(() => currentDate + milisecondsToSeconds(tokenTTL + 5));
+
+        const verifyFirstToken = verifyToken(token);
+        expect(verifyFirstToken).rejects.toThrowError(TokenExpiredError);
+
+        const responseRefreshToken = await supertest(app)
+            .post('/token')
+            .send({email, refreshToken});
+
+        expect(responseRefreshToken.status).toBe(201);
+        expect(responseRefreshToken.body).toHaveProperty('token');
+        const {token: tokenRefreshed} = responseRefreshToken.body;
+
+        const verifyTokenRefreshed = verifyToken(tokenRefreshed);
+        expect(verifyTokenRefreshed).resolves.not.toThrow();
+
+        jest.restoreAllMocks();
+    });
 });
