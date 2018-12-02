@@ -8,7 +8,8 @@
         "member-access": false,
         "no-console": [true, "log"],
         "jsx-no-multiline-js": false,
-        "interface-name": false
+        "interface-name": false,
+        "jsx-no-lambda": false
     },
     "rulesDirectory": []
 }
