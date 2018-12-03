@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/macro';
 import icon from '../assets/icons/fish-tank.svg';
-// import Spinner from './Spinner';
-import {COLOR_SECONDARY, GREY_LIGTH} from '../constants/colors';
-// import api from '../api';
+import Spinner from './Spinner';
+import Input from './Input';
+import {COLOR_SECONDARY} from '../constants/colors';
+import api from '../api';
 
 const LoginContainer = styled.div`
     height: 100%;
@@ -16,46 +17,6 @@ const LoginContainer = styled.div`
     & > * {
         margin: 16px 0px;
     }
-`;
-
-const InputContainer = styled.div`
-    width: 100%;
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
-`;
-
-const Input = styled.input`
-    width: 100%;
-    padding: 8px;
-    font-size: 1rem;
-    border: none;
-    border-bottom: 1px solid ${GREY_LIGTH};
-    background-color: inherit;
-    color: white;
-
-    ::placeholder {
-        color: ${GREY_LIGTH};
-    }
-
-    :focus {
-        outline: none;
-    }
-
-    :focus + span {
-        left: 0;
-    }
-`;
-
-const InputUnderline = styled.span`
-    transition: all 0.5s;
-    display: inline-block;
-    bottom: 0;
-    left: -100%;
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background-color: ${COLOR_SECONDARY};
 `;
 
 const Logo = styled.img`
@@ -89,6 +50,7 @@ const Login = () => {
     const [emailError, setEmailError] = useState('');
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [isLogging, setIsLogging] = useState(false);
 
     const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
         const emailValue = event.target.value;
@@ -115,29 +77,24 @@ const Login = () => {
     };
 
     const submitLogin = () => {
-        console.log('Do login', email, password);
+        setIsLogging(true);
+
+        api.login(email, password).then(response => {
+            setIsLogging(false);
+            window.localStorage.setItem('token', response.token);
+            window.localStorage.setItem('refreshToken', response.refreshToken);
+        });
     };
 
     const isInvalidLogin: boolean = !email || !password || !!emailError || !!passwordError;
 
     return (
         <>
-            {/* <Spinner /> */}
+            {isLogging && <Spinner />}
             <LoginContainer>
                 <Logo src={icon} />
-                <InputContainer>
-                    <Input value={email} type="text" onChange={onChangeEmail} placeholder="Email" />
-                    <InputUnderline />
-                </InputContainer>
-                <InputContainer>
-                    <Input
-                        value={password}
-                        type="password"
-                        onChange={onChangePassword}
-                        placeholder="Password"
-                    />
-                    <InputUnderline />
-                </InputContainer>
+                <Input value={email} type="text" onChange={onChangeEmail} placeholder="Email" />
+                <Input value={password} type="password" onChange={onChangePassword} placeholder="Password" />
                 <Button disabled={isInvalidLogin} onClick={submitLogin}>
                     Enter
                 </Button>

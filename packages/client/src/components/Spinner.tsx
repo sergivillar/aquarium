@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled, {keyframes} from 'styled-components/macro';
 import {COLOR_PRIMARY, COLOR_SECONDARY} from '../constants/colors';
+import {setTimeout} from 'timers';
 
 const rotate = keyframes`
     100% { transform: rotate(360deg) }
@@ -55,13 +56,33 @@ const SecondDot = styled(Dot)`
     background-color: ${COLOR_SECONDARY};
 `;
 
-const Spinner = () => (
-    <Container>
-        <SpinnerContainer>
-            <Dot />
-            <SecondDot />
-        </SpinnerContainer>
-    </Container>
-);
+interface SpinnerProps {
+    delay?: number;
+}
+
+const Spinner = ({delay = 500}: SpinnerProps) => {
+    const [showSpinner, setShowSpinner] = useState(false);
+
+    let timeoutId: number;
+    useEffect(() => {
+        timeoutId = window.setTimeout(() => {
+            setShowSpinner(true);
+        }, delay);
+
+        return () => {
+            setShowSpinner(false);
+            clearTimeout(timeoutId);
+        };
+    });
+
+    return showSpinner ? (
+        <Container>
+            <SpinnerContainer>
+                <Dot />
+                <SecondDot />
+            </SpinnerContainer>
+        </Container>
+    ) : null;
+};
 
 export default Spinner;
