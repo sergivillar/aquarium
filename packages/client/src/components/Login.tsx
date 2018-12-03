@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/macro';
 import icon from '../assets/icons/fish-tank.svg';
-import Spinner from './Spinner';
+// import Spinner from './Spinner';
+import {COLOR_SECONDARY, GREY_LIGTH} from '../constants/colors';
 // import api from '../api';
 
 const LoginContainer = styled.div`
@@ -29,12 +30,12 @@ const Input = styled.input`
     padding: 8px;
     font-size: 1rem;
     border: none;
-    border-bottom: 1px solid #e1e2e1;
+    border-bottom: 1px solid ${GREY_LIGTH};
     background-color: inherit;
     color: white;
 
     ::placeholder {
-        color: #dcdad6;
+        color: ${GREY_LIGTH};
     }
 
     :focus {
@@ -54,7 +55,7 @@ const InputUnderline = styled.span`
     position: absolute;
     width: 100%;
     height: 2px;
-    background-color: #ffca28;
+    background-color: ${COLOR_SECONDARY};
 `;
 
 const Logo = styled.img`
@@ -64,7 +65,7 @@ const Logo = styled.img`
 const Button = styled.button`
     width: 100%;
     padding: 16px;
-    background-color: #ffca28;
+    background-color: ${COLOR_SECONDARY};
     text-transform: uppercase;
     font-size: 1rem;
 
@@ -120,21 +121,28 @@ const Login = () => {
     const isInvalidLogin: boolean = !email || !password || !!emailError || !!passwordError;
 
     return (
-        <LoginContainer>
-            <Spinner />
-            <Logo src={icon} />
-            <InputContainer>
-                <Input value={email} type="text" onChange={onChangeEmail} placeholder="Email" />
-                <InputUnderline />
-            </InputContainer>
-            <InputContainer>
-                <Input value={password} type="password" onChange={onChangePassword} placeholder="Password" />
-                <InputUnderline />
-            </InputContainer>
-            <Button disabled={isInvalidLogin} onClick={submitLogin}>
-                Enter
-            </Button>
-        </LoginContainer>
+        <>
+            {/* <Spinner /> */}
+            <LoginContainer>
+                <Logo src={icon} />
+                <InputContainer>
+                    <Input value={email} type="text" onChange={onChangeEmail} placeholder="Email" />
+                    <InputUnderline />
+                </InputContainer>
+                <InputContainer>
+                    <Input
+                        value={password}
+                        type="password"
+                        onChange={onChangePassword}
+                        placeholder="Password"
+                    />
+                    <InputUnderline />
+                </InputContainer>
+                <Button disabled={isInvalidLogin} onClick={submitLogin}>
+                    Enter
+                </Button>
+            </LoginContainer>
+        </>
     );
 };
 
