@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styled, {keyframes} from 'styled-components/macro';
-import {COLOR_PRIMARY, COLOR_SECONDARY} from '../constants/colors';
+import {PRIMARY, SECONDARY} from '../constants/colors';
 import {setTimeout} from 'timers';
 
 const rotate = keyframes`
@@ -43,7 +43,7 @@ const Dot = styled.div`
     display: inline-block;
     position: absolute;
     top: 0;
-    background-color: ${COLOR_PRIMARY};
+    background-color: ${PRIMARY};
     border-radius: 100%;
 
     animation: ${bounce} 2s infinite ease-in-out;
@@ -53,7 +53,7 @@ const SecondDot = styled(Dot)`
     top: auto;
     bottom: 0;
     animation-delay: -1s;
-    background-color: ${COLOR_SECONDARY};
+    background-color: ${SECONDARY};
 `;
 
 interface SpinnerProps {

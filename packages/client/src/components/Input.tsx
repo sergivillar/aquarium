@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import {COLOR_SECONDARY, GREY_LIGTH} from '../constants/colors';
+import {SECONDARY, GREY_LIGTH, ERROR} from '../constants/colors';
+
+const Container = styled.div`
+    width: 100%;
+`;
 
 const InputContainer = styled.div`
     width: 100%;
@@ -14,7 +18,7 @@ const Input = styled.input`
     padding: 8px;
     font-size: 1rem;
     border: none;
-    border-bottom: 1px solid ${GREY_LIGTH};
+    border-bottom: 2px solid ${(props: InputProps) => (props.errorMessage ? ERROR : GREY_LIGTH)};
     background-color: inherit;
     color: white;
 
@@ -39,21 +43,38 @@ const InputUnderline = styled.span`
     position: absolute;
     width: 100%;
     height: 2px;
-    background-color: ${COLOR_SECONDARY};
+    background-color: ${SECONDARY};
+`;
+
+const ErrorMessage = styled.p`
+    width: 100%;
+    margin: 0;
+    font-size: 0.8rem;
+    margin-top: 8px;
 `;
 
 interface InputProps {
     value: string;
     type: string;
     placeholder?: string;
+    errorMessage?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputController = ({value, type, placeholder, onChange}: InputProps) => (
-    <InputContainer>
-        <Input value={value} type={type} onChange={onChange} placeholder={placeholder} />
-        <InputUnderline />
-    </InputContainer>
+const InputController = ({value, type, placeholder, errorMessage, onChange}: InputProps) => (
+    <Container>
+        <InputContainer>
+            <Input
+                value={value}
+                type={type}
+                onChange={onChange}
+                placeholder={placeholder}
+                errorMessage={errorMessage}
+            />
+            <InputUnderline />
+        </InputContainer>
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+    </Container>
 );
 
 export default InputController;
