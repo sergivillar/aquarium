@@ -1,4 +1,5 @@
 import express, {Request} from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import DataLoader from 'dataloader';
@@ -11,14 +12,15 @@ import models from './models';
 import {MeasureInstance} from './models/measure';
 import {IContext} from './graphql';
 
+const app = express();
+
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config();
+    app.use(cors());
 }
 
 // tslint:disable-next-line
 require('./auth');
-
-const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));

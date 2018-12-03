@@ -7,7 +7,7 @@
         "initdb": "docker-compose up -d",
         "prebuild": "rm -rf build/*",
         "build": "babel --extensions '.ts,.js' src --out-dir build --source-maps",
-        "dev": "nodemon index.ts --exec babel-node --extensions '.ts' ./src/index.ts",
+        "dev": "nodemon ./src/index.ts --exec babel-node --extensions '.ts' ./src/index.ts",
         "prestart": "NODE_ENV=production yarn build",
         "start": "NODE_ENV=production pm2 start ./build/index.js --name server",
         "check-types": "tsc",
@@ -54,6 +54,7 @@
     "dependencies": {
         "apollo-server-express": "^2.0.6",
         "bcrypt": "^3.0.0",
+        "cors": "^2.8.5",
         "dataloader": "^1.4.0",
         "dotenv": "^6.0.0",
         "express": "^4.16.3",
