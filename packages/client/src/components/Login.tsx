@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/macro';
 import icon from '../assets/icons/fish-tank.svg';
+import Spinner from './Spinner';
 // import api from '../api';
 
 const LoginContainer = styled.div`
@@ -120,6 +121,7 @@ const Login = () => {
 
     return (
         <LoginContainer>
+            <Spinner />
             <Logo src={icon} />
             <InputContainer>
                 <Input value={email} type="text" onChange={onChangeEmail} placeholder="Email" />
