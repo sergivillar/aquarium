@@ -5,6 +5,7 @@ import Spinner from './Spinner';
 import Input from './Input';
 import {SECONDARY, DISABLE} from '../constants/colors';
 import api from '../api';
+import {Redirect} from 'react-router';
 
 const LoginContainer = styled.div`
     height: 100%;
@@ -68,6 +69,7 @@ const emailErrorMsg: string = 'Email has an incorrect value';
 const passwordErrorMsg: string = 'Password length must be between 6 and 12 characters.';
 
 const Login = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(emailErrorMsg);
     const [password, setPassword] = useState('');
@@ -109,10 +111,16 @@ const Login = () => {
             setIsLogging(false);
             window.localStorage.setItem('token', response.token);
             window.localStorage.setItem('refreshToken', response.refreshToken);
+
+            setIsAuthenticated(true);
         });
     };
 
     const isInvalidLogin: boolean = showErrors && (!email || !password || !!emailError || !!passwordError);
+
+    if (isAuthenticated) {
+        return <Redirect to="/" />;
+    }
 
     return (
         <>

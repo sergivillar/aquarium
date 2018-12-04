@@ -9,7 +9,8 @@
         "no-console": [true, "log"],
         "jsx-no-multiline-js": false,
         "interface-name": false,
-        "jsx-no-lambda": false
+        "jsx-no-lambda": false,
+        "jsx-boolean-value": false
     },
     "rulesDirectory": []
 }
