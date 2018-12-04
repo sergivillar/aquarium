@@ -20,7 +20,6 @@ const Input = styled.input`
     border: none;
     border-bottom: 2px solid ${(props: InputProps) => (props.errorMessage ? ERROR : GREY_LIGTH)};
     background-color: inherit;
-    color: white;
 
     ::placeholder {
         color: ${GREY_LIGTH};
@@ -53,7 +52,7 @@ const ErrorMessageContainer = styled.div`
 `;
 
 const ErrorMessage = styled.p`
-    color: ${SECONDARY_DARK};
+    color: ${ERROR};
     width: 100%;
     margin: 0;
     font-size: 0.7rem;

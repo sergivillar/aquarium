@@ -10,3 +10,4 @@ export const SECONDARY_DARK = '#c79a00';
 export const GREY_LIGTH = '#e1e2e1';
 
 export const ERROR = '#d32f2f';
+export const DISABLE = '#dcdcdc';

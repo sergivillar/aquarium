@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import icon from '../assets/icons/fish-tank.svg';
 import Spinner from './Spinner';
 import Input from './Input';
-import {SECONDARY, ERROR} from '../constants/colors';
+import {SECONDARY, DISABLE} from '../constants/colors';
 import api from '../api';
 
 const LoginContainer = styled.div`
@@ -13,6 +13,18 @@ const LoginContainer = styled.div`
     align-items: center;
     flex-direction: column;
     padding: 0 16px;
+`;
+
+const Card = styled.div`
+    position: relative;
+    width: 100%;
+    padding: 32px 16px 48px 16px;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 0px 0px 15px 1px #0000007a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     & > div {
         margin-bottom: 24px;
@@ -25,19 +37,24 @@ const Logo = styled.img`
 `;
 
 const Button = styled.button`
-    width: 100%;
+    font-size: 1rem;
+    position: absolute;
+    border: none;
+    border-radius: 20px;
+    height: 48px;
+    bottom: -24px;
+    width: 50%;
     padding: 16px;
     background-color: ${SECONDARY};
     text-transform: uppercase;
-    font-size: 1rem;
-    margin-top: 32px;
+    box-shadow: 0 4px 2px -2px #0000007a;
 
     :focus {
         outline: none;
     }
 
     &:disabled {
-        opacity: 0.5;
+        background-color: ${DISABLE};
     }
 `;
 
@@ -102,23 +119,25 @@ const Login = () => {
             {isLogging && <Spinner />}
             <LoginContainer>
                 <Logo src={icon} />
-                <Input
-                    value={email}
-                    type="text"
-                    onChange={onChangeEmail}
-                    placeholder="Email"
-                    errorMessage={showErrors ? emailError : undefined}
-                />
-                <Input
-                    value={password}
-                    type="password"
-                    onChange={onChangePassword}
-                    placeholder="Password"
-                    errorMessage={showErrors ? passwordError : undefined}
-                />
-                <Button disabled={isInvalidLogin} onClick={submitLogin}>
-                    Enter
-                </Button>
+                <Card>
+                    <Input
+                        value={email}
+                        type="text"
+                        onChange={onChangeEmail}
+                        placeholder="Email"
+                        errorMessage={showErrors ? emailError : undefined}
+                    />
+                    <Input
+                        value={password}
+                        type="password"
+                        onChange={onChangePassword}
+                        placeholder="Password"
+                        errorMessage={showErrors ? passwordError : undefined}
+                    />
+                    <Button disabled={isInvalidLogin} onClick={submitLogin}>
+                        Enter
+                    </Button>
+                </Card>
             </LoginContainer>
         </>
     );
