@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import {SECONDARY, GREY_LIGTH, ERROR} from '../constants/colors';
+import {SECONDARY, SECONDARY_DARK, GREY_LIGTH, ERROR} from '../constants/colors';
 
 const Container = styled.div`
     width: 100%;
@@ -46,11 +46,19 @@ const InputUnderline = styled.span`
     background-color: ${SECONDARY};
 `;
 
+const ErrorMessageContainer = styled.div`
+    position: absolute;
+    overflow: hidden;
+    margin-top: 6px;
+`;
+
 const ErrorMessage = styled.p`
+    color: ${SECONDARY_DARK};
     width: 100%;
     margin: 0;
-    font-size: 0.8rem;
-    margin-top: 8px;
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+    transform: ${(props: {children?: string}) => (props.children ? 'translateY(0)' : 'translateY(-100%)')};
 `;
 
 interface InputProps {
@@ -73,7 +81,9 @@ const InputController = ({value, type, placeholder, errorMessage, onChange}: Inp
             />
             <InputUnderline />
         </InputContainer>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        <ErrorMessageContainer>
+            <ErrorMessage>{errorMessage}</ErrorMessage>
+        </ErrorMessageContainer>
     </Container>
 );
 
