@@ -13,7 +13,8 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "preserve",
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "lib": ["es6", "es2015", "es2016", "dom", "scripthost"]
     },
     "include": ["src"]
 }
