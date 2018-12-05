@@ -109,6 +109,29 @@ describe('Tets fetch interceptor', () => {
             expect(error).toMatchObject(expectedResultInterceptorRejected);
         }
     });
+
+    it('Two interceptors first undefined, second rejected', async () => {
+        const expectedResultFetch = {test: 1};
+        const expectedResultInterceptorRejected = new Error('Test error');
+
+        window.fetch = jest.fn().mockImplementation(() => Promise.resolve(expectedResultFetch));
+        const interceptorSpyResolved = jest.fn();
+
+        addResponseInterceptor(undefined, undefined);
+
+        addResponseInterceptor((responseFetch: any) => {
+            expect(responseFetch).toMatchObject(expectedResultFetch);
+            interceptorSpyResolved();
+            return Promise.reject(expectedResultInterceptorRejected);
+        });
+
+        try {
+            await fetch('http://test.com');
+        } catch (error) {
+            expect(interceptorSpyResolved).toHaveBeenCalled();
+            expect(error).toMatchObject(expectedResultInterceptorRejected);
+        }
+    });
 });
 
 export default undefined;

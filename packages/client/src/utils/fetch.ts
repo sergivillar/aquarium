@@ -1,30 +1,3 @@
-// class FetchInterceptor {
-//     interceptors: Array<Array<(() => any) | undefined>> = [];
-
-//     request(config: RequestInfo) {
-//         let promise: Promise<any> = Promise.resolve(config);
-
-//         const promisesChain: Array<((...args: any) => any) | undefined> = [window.fetch];
-
-//         this.interceptors.forEach(([resolve, reject]) => {
-//             promisesChain.unshift(resolve, reject);
-//         });
-
-//         while (promisesChain.length) {
-//             const [resolve, reject] = promisesChain.splice(0, 2);
-//             promise = promise.then(resolve, reject);
-//         }
-
-//         return promise;
-//     }
-
-//     addIntercepptor<T, U>(resolve?: () => T, reject?: () => U) {
-//         this.interceptors.push([resolve, reject]);
-//     }
-// }
-
-// const fetch = new FetchInterceptor();
-
 let interceptors: Array<Array<(() => any) | undefined>> = [];
 
 function fetchInterceptor(config: RequestInfo) {
