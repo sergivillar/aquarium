@@ -21,3 +21,11 @@ export const getItem = (key: string[] | string) => {
 
     return window.localStorage.getItem(key);
 };
+
+export const removeItem = (key: string[] | string) => {
+    if (Array.isArray(key)) {
+        return key.map(item => window.localStorage.removeItem(item));
+    }
+
+    return window.localStorage.removeItem(key);
+};

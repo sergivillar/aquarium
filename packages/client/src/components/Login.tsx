@@ -7,6 +7,7 @@ import Input from './Input';
 import {SECONDARY, DISABLE} from '../constants/colors';
 import api from '../api';
 import {setItem} from '../utils/local-storage';
+import {isAuthenticated} from '../utils/user';
 
 const LoginContainer = styled.div`
     height: 100%;
@@ -70,7 +71,6 @@ const emailErrorMsg: string = 'Email has an incorrect value';
 const passwordErrorMsg: string = 'Password length must be between 6 and 12 characters.';
 
 const Login = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(emailErrorMsg);
     const [password, setPassword] = useState('');
@@ -112,18 +112,21 @@ const Login = () => {
             setIsLogging(false);
 
             if (response.status !== 201) {
-                return setIsAuthenticated(false);
+                // TODO show errors in alert
+                return;
             }
 
             const {token, refreshToken} = await response.json();
             setItem({email, token, refreshToken});
-            setIsAuthenticated(true);
         });
     };
 
     const isInvalidLogin: boolean = showErrors && (!email || !password || !!emailError || !!passwordError);
 
-    if (isAuthenticated) {
+    console.log({isAuthenticated});
+
+    // TODO create isAuthenticatedSelector to get this from local-storage
+    if (isAuthenticated()) {
         return <Redirect to="/" />;
     }
 

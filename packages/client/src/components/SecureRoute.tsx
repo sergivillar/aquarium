@@ -9,20 +9,25 @@ interface Props {
 }
 
 const SecuredRoute = (props: Props) => {
-    const {component: Component, path, exact} = props;
-    const authToken = getItem('token');
-
-    if (!authToken) {
-        return <Redirect to="/login" />;
-    }
+    const {component: Component, ...rest} = props;
+    const [email, token, refreshToken] = getItem(['email', 'token', 'refreshToken']) as string[];
+    const isAuthenticated = !!email && !!token && refreshToken;
 
     return (
         <Route
-            exact={exact}
-            path={path}
-            render={() => {
-                return <Component />;
-            }}
+            {...rest}
+            render={propsRoute =>
+                isAuthenticated ? (
+                    <Component {...propsRoute} />
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: '/login',
+                            state: {from: propsRoute.location},
+                        }}
+                    />
+                )
+            }
         />
     );
 };
