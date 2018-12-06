@@ -108,8 +108,14 @@ const Login = () => {
         setIsLogging(true);
         setShowErros(false);
 
-        api.login(email, password).then(({token, refreshToken}) => {
+        api.login(email, password).then(async response => {
             setIsLogging(false);
+
+            if (response.status !== 201) {
+                return setIsAuthenticated(false);
+            }
+
+            const {token, refreshToken} = await response.json();
             setItem({email, token, refreshToken});
             setIsAuthenticated(true);
         });

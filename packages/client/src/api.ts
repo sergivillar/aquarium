@@ -1,7 +1,11 @@
-import {addResponseInterceptor, cleanInterceptors} from './utils/fetch';
+import ApolloClient from 'apollo-boost';
+import fetchInterpector, {addResponseInterceptor, cleanInterceptors} from './utils/fetch';
 import {getItem} from './utils/local-storage';
 
 const API_URL = 'http://localhost:3000/';
+
+// Overwrite fetch in order to use interceptor
+window.fetch = fetchInterpector;
 
 const tokenRefreshInterceptor = () =>
     addResponseInterceptor(async response => {
@@ -32,7 +36,7 @@ const login = (email: string, password: string) =>
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({email, password}),
-    }).then(res => res.json());
+    });
 
 const token = (email: string, refreshToken: string) =>
     fetch(API_URL + 'token', {
@@ -41,10 +45,15 @@ const token = (email: string, refreshToken: string) =>
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({email, refreshToken}),
-    }).then(res => res.json());
+    });
+
+const client = new ApolloClient({
+    uri: API_URL + 'graphql',
+});
 
 const api = {
     login: (email: string, password: string) => {
+        console.log('REMOVE INTERCEPTOR');
         cleanInterceptors();
         return login(email, password);
     },
@@ -52,9 +61,12 @@ const api = {
         cleanInterceptors();
         return token(email, refreshToken);
     },
-    grapqhl: () => {
+    grapqhl: (() => {
+        // TODO maybe this interceptor should be added each time you go to login page (removed)
+        console.log('ADD INTERCEPTOR');
         tokenRefreshInterceptor();
-    },
+        return client;
+    })(),
 };
 
 export default api;

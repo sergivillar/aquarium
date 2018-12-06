@@ -1,6 +1,20 @@
-import fetch, {addResponseInterceptor, cleanInterceptors} from '../fetch';
+jest.mock('../fetch', () => ({
+    fetch: jest.fn(),
+    addResponseInterceptor: jest.fn(),
+}));
+
+jest.unmock('../fetch');
+
+import {addResponseInterceptor, cleanInterceptors, fetch as fetchInterceptor} from '../fetch';
 
 describe('Tets fetch interceptor', () => {
+    let fetchMock: jest.Mock;
+
+    beforeAll(() => {
+        fetchMock = jest.fn();
+        window.fetch = fetchInterceptor(fetchMock);
+    });
+
     afterEach(() => {
         cleanInterceptors();
     });
@@ -8,7 +22,7 @@ describe('Tets fetch interceptor', () => {
     it('Fetch without any interceptor', async () => {
         const expectedResult = {test: 1};
 
-        window.fetch = jest.fn().mockImplementation(() => Promise.resolve(expectedResult));
+        fetchMock.mockImplementation(() => Promise.resolve(expectedResult));
 
         const response = await fetch('http://test.com');
 
@@ -19,7 +33,7 @@ describe('Tets fetch interceptor', () => {
         const expectedResultFetch = {test: 1};
         const expectedResultInterceptor = {test: 1};
 
-        window.fetch = jest.fn().mockImplementation(() => Promise.resolve(expectedResultFetch));
+        fetchMock.mockImplementation(() => Promise.resolve(expectedResultFetch));
         const interceptorSpy = jest.fn();
 
         addResponseInterceptor((responseFetch: any) => {
@@ -38,7 +52,7 @@ describe('Tets fetch interceptor', () => {
         const expectedResultFetch = new Error('Test error');
         const expectedResultInterceptor = {test: 1};
 
-        window.fetch = jest.fn().mockImplementation(() => Promise.reject(expectedResultFetch));
+        fetchMock.mockImplementation(() => Promise.reject(expectedResultFetch));
         const interceptorSpy = jest.fn();
 
         addResponseInterceptor(undefined, (responseFetch: any) => {
@@ -58,7 +72,7 @@ describe('Tets fetch interceptor', () => {
         const expectedResultInterceptorResolved = {test: 2};
         const expectedResultInterceptorRejected = new Error('Test error');
 
-        window.fetch = jest.fn().mockImplementation(() => Promise.resolve(expectedResultFetch));
+        fetchMock.mockImplementation(() => Promise.resolve(expectedResultFetch));
         const interceptorSpyResolved = jest.fn();
         const interceptorSpyRejected = jest.fn();
 
@@ -85,7 +99,7 @@ describe('Tets fetch interceptor', () => {
         const expectedResultInterceptorResolved = {test: 2};
         const expectedResultInterceptorRejected = new Error('Test error');
 
-        window.fetch = jest.fn().mockImplementation(() => Promise.resolve(expectedResultFetch));
+        fetchMock.mockImplementation(() => Promise.resolve(expectedResultFetch));
         const interceptorSpyResolved = jest.fn();
         const interceptorSpyRejected = jest.fn();
 
@@ -114,7 +128,7 @@ describe('Tets fetch interceptor', () => {
         const expectedResultFetch = {test: 1};
         const expectedResultInterceptorRejected = new Error('Test error');
 
-        window.fetch = jest.fn().mockImplementation(() => Promise.resolve(expectedResultFetch));
+        fetchMock.mockImplementation(() => Promise.resolve(expectedResultFetch));
         const interceptorSpyResolved = jest.fn();
 
         addResponseInterceptor(undefined, undefined);

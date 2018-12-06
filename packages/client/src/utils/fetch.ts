@@ -1,23 +1,28 @@
 let interceptors: Array<Array<(() => any) | undefined>> = [];
 
-function fetchInterceptor(config: RequestInfo, init?: RequestInit) {
-    let promise: Promise<any> = Promise.resolve(config);
+// @ts-ignore
+const ENVIRONMENT_IS_WORKER = typeof importScripts === 'function';
 
-    const promisesChain: Array<((...args: any) => any) | undefined> = [
-        () => window.fetch(config, init),
-        undefined,
-    ];
+function fetch(originalFetch = ENVIRONMENT_IS_WORKER ? self.fetch : window.fetch) {
+    return function fetchInterceptor(config: RequestInfo, init?: RequestInit) {
+        let promise: Promise<any> = Promise.resolve(config);
 
-    interceptors.forEach(([resolve, reject]) => {
-        promisesChain.push(resolve, reject);
-    });
+        const promisesChain: Array<((...args: any) => any) | undefined> = [
+            () => originalFetch(config, init),
+            undefined,
+        ];
 
-    while (promisesChain.length) {
-        const [resolve, reject] = promisesChain.splice(0, 2);
-        promise = promise.then(resolve, reject);
-    }
+        interceptors.forEach(([resolve, reject]) => {
+            promisesChain.push(resolve, reject);
+        });
 
-    return promise;
+        while (promisesChain.length) {
+            const [resolve, reject] = promisesChain.splice(0, 2);
+            promise = promise.then(resolve, reject);
+        }
+
+        return promise;
+    };
 }
 
 function addResponseInterceptor<T, U>(resolve?: (arg?: any) => T, reject?: (arg?: any) => U) {
@@ -29,5 +34,6 @@ function cleanInterceptors() {
     interceptors = [];
 }
 
-export {addResponseInterceptor, cleanInterceptors};
-export default fetchInterceptor;
+export {addResponseInterceptor, cleanInterceptors, fetch};
+
+export default fetch();
