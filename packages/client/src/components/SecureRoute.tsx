@@ -1,5 +1,6 @@
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
+import {getItem} from '../utils/local-storage';
 
 interface Props {
     component: any;
@@ -9,7 +10,7 @@ interface Props {
 
 const SecuredRoute = (props: Props) => {
     const {component: Component, path, exact} = props;
-    const authToken = window.localStorage.getItem('token');
+    const authToken = getItem('token');
 
     if (!authToken) {
         return <Redirect to="/login" />;

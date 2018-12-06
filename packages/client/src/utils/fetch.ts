@@ -1,9 +1,12 @@
 let interceptors: Array<Array<(() => any) | undefined>> = [];
 
-function fetchInterceptor(config: RequestInfo) {
+function fetchInterceptor(config: RequestInfo, init?: RequestInit) {
     let promise: Promise<any> = Promise.resolve(config);
 
-    const promisesChain: Array<((...args: any) => any) | undefined> = [window.fetch, undefined];
+    const promisesChain: Array<((...args: any) => any) | undefined> = [
+        () => window.fetch(config, init),
+        undefined,
+    ];
 
     interceptors.forEach(([resolve, reject]) => {
         promisesChain.push(resolve, reject);

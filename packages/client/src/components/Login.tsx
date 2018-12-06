@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
+import {Redirect} from 'react-router';
 import styled from 'styled-components/macro';
 import icon from '../assets/icons/fish-tank.svg';
 import Spinner from './Spinner';
 import Input from './Input';
 import {SECONDARY, DISABLE} from '../constants/colors';
 import api from '../api';
-import {Redirect} from 'react-router';
+import {setItem} from '../utils/local-storage';
 
 const LoginContainer = styled.div`
     height: 100%;
@@ -107,11 +108,9 @@ const Login = () => {
         setIsLogging(true);
         setShowErros(false);
 
-        api.login(email, password).then(response => {
+        api.login(email, password).then(({token, refreshToken}) => {
             setIsLogging(false);
-            window.localStorage.setItem('token', response.token);
-            window.localStorage.setItem('refreshToken', response.refreshToken);
-
+            setItem({email, token, refreshToken});
             setIsAuthenticated(true);
         });
     };
