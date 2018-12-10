@@ -1,10 +1,3 @@
-jest.mock('../fetch', () => ({
-    fetch: jest.fn(),
-    addResponseInterceptor: jest.fn(),
-}));
-
-jest.unmock('../fetch');
-
 import {addResponseInterceptor, cleanInterceptors, fetch as fetchInterceptor} from '../fetch';
 
 describe('Tets fetch interceptor', () => {
