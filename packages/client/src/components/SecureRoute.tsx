@@ -1,6 +1,7 @@
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 import {getItem} from '../utils/local-storage';
+import {isAuthenticated} from '../utils/user';
 
 interface Props {
     component: any;
@@ -11,13 +12,12 @@ interface Props {
 const SecuredRoute = (props: Props) => {
     const {component: Component, ...rest} = props;
     const [email, token, refreshToken] = getItem(['email', 'token', 'refreshToken']) as string[];
-    const isAuthenticated = !!email && !!token && refreshToken;
 
     return (
         <Route
             {...rest}
             render={propsRoute =>
-                isAuthenticated ? (
+                isAuthenticated() ? (
                     <Component {...propsRoute} />
                 ) : (
                     <Redirect

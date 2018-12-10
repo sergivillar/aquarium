@@ -1,11 +1,8 @@
 import React from 'react';
-import {BrowserRouter, Route, Link, Redirect} from 'react-router-dom';
-import gql from 'graphql-tag';
+import {BrowserRouter, Route} from 'react-router-dom';
 import SecureRoute from './components/SecureRoute';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
-import fetch from './utils/fetch';
-import api from './api';
 
 const App = () => (
     <BrowserRouter>

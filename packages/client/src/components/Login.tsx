@@ -123,9 +123,6 @@ const Login = () => {
 
     const isInvalidLogin: boolean = showErrors && (!email || !password || !!emailError || !!passwordError);
 
-    console.log({isAuthenticated});
-
-    // TODO create isAuthenticatedSelector to get this from local-storage
     if (isAuthenticated()) {
         return <Redirect to="/" />;
     }
