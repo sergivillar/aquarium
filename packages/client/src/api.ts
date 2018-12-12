@@ -39,6 +39,15 @@ const login = (email: string, password: string) =>
         body: JSON.stringify({email, password}),
     });
 
+const singUp = (email: string, password: string) =>
+    fetch(API_URL + 'singup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email, password}),
+    });
+
 const token = async (email: string, refreshToken: string) => {
     const response = await fetch(API_URL + 'token', {
         method: 'POST',
@@ -90,6 +99,7 @@ const client = new ApolloClient({
 
 const api = {
     login: (email: string, password: string) => login(email, password),
+    singUp: (email: string, password: string) => singUp(email, password),
     refreshToken: (email: string, refreshToken: string) => token(email, refreshToken),
     grapqhl: client,
 };

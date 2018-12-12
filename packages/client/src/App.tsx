@@ -2,12 +2,14 @@ import React from 'react';
 import {BrowserRouter, Route} from 'react-router-dom';
 import SecureRoute from './components/SecureRoute';
 import Dashboard from './components/Dashboard';
-import Login from './components/Login';
+import Login from './auth/components/Login';
+import SingUp from './auth/components/SingUp';
 
 const App = () => (
     <BrowserRouter>
         <>
             <Route exact path="/login" component={Login} />
+            <Route exact path="/singup" component={SingUp} />
             <SecureRoute exact path="/" component={Dashboard} />
         </>
     </BrowserRouter>
