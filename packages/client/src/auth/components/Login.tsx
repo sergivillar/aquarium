@@ -5,18 +5,13 @@ import AuthWrapper from './AuthWrapper';
 import Input from '../../components/Input';
 import api from '../../api';
 import {setItem} from '../../utils/local-storage';
+import {validateEmail} from '../../utils/validators';
 
 const SingUpLink = styled(Link)`
     color: white;
     font-weight: 300;
     font-size: 0.8rem;
 `;
-
-// Take from https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
-function validateEmail(email: string): boolean {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-}
 
 const emailErrorMsg: string = 'Email has an incorrect value';
 const passwordErrorMsg: string = 'Password length must be between 6 and 12 characters.';
