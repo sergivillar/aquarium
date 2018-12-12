@@ -10,9 +10,9 @@ export const isAuthenticated = (): boolean => {
         return false;
     }
 
-    const data = jsonwebtoken.decode(token) as any;
+    const data = jsonwebtoken.decode(token);
 
-    if (!data || !data.exp) {
+    if (!data || typeof data !== 'object' || !data.exp) {
         return false;
     }
 
