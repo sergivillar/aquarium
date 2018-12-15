@@ -13,12 +13,12 @@ const InputContainer = styled.div`
     overflow: hidden;
 `;
 
-const Input = styled.input`
+const Input = styled.input<InputProps>`
     width: 100%;
     padding: 8px;
     font-size: 1rem;
     border: none;
-    border-bottom: 2px solid ${(props: InputProps) => (props.errorMessage ? ERROR : GREY_LIGTH)};
+    border-bottom: 2px solid ${({errorMessage}) => (errorMessage ? ERROR : GREY_LIGTH)};
     background-color: inherit;
 
     ::placeholder {
