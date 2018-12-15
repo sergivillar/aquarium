@@ -16,7 +16,8 @@ const Login = () => {
     const [passwordRepeat, setPasswordRepeat] = useState('');
     const [passwordError, setPasswordError] = useState(passwordInvalidErrorMsg);
     const [passwordRepeatError, setPasswordRepeatError] = useState(passwordMatchErrorMsg);
-    const [showErrors, setShowErros] = useState(false);
+    const [showFormErrors, setShowFormErros] = useState(false);
+    const [serverError, setServerError] = useState('');
     const [isLogging, setIsLogging] = useState(false);
 
     const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,27 +63,31 @@ const Login = () => {
 
     const submitLogin = () => {
         if (emailError || passwordError || passwordRepeatError) {
-            return setShowErros(true);
+            return setShowFormErros(true);
         }
 
         setIsLogging(true);
-        setShowErros(false);
+        setShowFormErros(false);
 
         api.singUp(email, password).then(async response => {
+            setServerError('');
+            const data = await response.json();
+
             if (response.status !== 201) {
-                // TODO show errors in alert
                 setIsLogging(false);
+                setServerError(data.message);
                 return;
             }
 
-            const {token, refreshToken} = await response.json();
+            const {token, refreshToken} = data;
+
             setItem({email, token, refreshToken});
             setIsLogging(false);
         });
     };
 
     const isInvalidLogin: boolean =
-        showErrors &&
+        showFormErrors &&
         (!email || !password || !passwordRepeat || !!emailError || !!passwordError || !!passwordRepeatError);
 
     return (
@@ -91,27 +96,28 @@ const Login = () => {
             isRequesting={isLogging}
             onPress={submitLogin}
             disabled={isInvalidLogin}
+            serverError={serverError}
         >
             <Input
                 value={email}
                 type="text"
                 onChange={onChangeEmail}
                 placeholder="Email"
-                errorMessage={showErrors ? emailError : undefined}
+                errorMessage={showFormErrors ? emailError : undefined}
             />
             <Input
                 value={password}
                 type="password"
                 onChange={onChangePassword}
                 placeholder="Password"
-                errorMessage={showErrors ? passwordError : undefined}
+                errorMessage={showFormErrors ? passwordError : undefined}
             />
             <Input
                 value={passwordRepeat}
                 type="password"
                 onChange={onChangePasswordRepeat}
                 placeholder="Repeat password"
-                errorMessage={showErrors ? passwordRepeatError : undefined}
+                errorMessage={showFormErrors ? passwordRepeatError : undefined}
             />
         </AuthWrapper>
     );

@@ -5,6 +5,7 @@ import icon from '../../assets/icons/fish-tank.svg';
 import Spinner from '../../components/Spinner';
 import {SECONDARY, SECONDARY_DARK, DISABLE} from '../../constants/colors';
 import {isAuthenticated} from '../../utils/user';
+import SnackBar, {SNACKBAR_DANGER} from '../../components/Snackbar';
 
 const AuthContainer = styled.div`
     height: 100%;
@@ -70,26 +71,28 @@ interface Props {
     isRequesting: boolean;
     disabled?: boolean;
     footer?: any;
+    serverError?: string;
 }
 
-const Auth = (props: Props) => {
+const Auth = ({isRequesting, disabled, footer, onPress, submitMessage, serverError, children}: Props) => {
     if (isAuthenticated()) {
         return <Redirect to="/" />;
     }
 
     return (
         <>
-            {props.isRequesting && <Spinner />}
+            {isRequesting && <Spinner />}
             <AuthContainer>
                 <Logo src={icon} />
                 <Card>
-                    {props.children}
-                    <Button disabled={props.disabled} onClick={props.onPress}>
-                        {props.submitMessage}
+                    {children}
+                    <Button disabled={disabled} onClick={onPress}>
+                        {submitMessage}
                     </Button>
                 </Card>
-                {props.footer}
+                {footer}
             </AuthContainer>
+            {!!serverError && <SnackBar type={SNACKBAR_DANGER}>{serverError}</SnackBar>}
         </>
     );
 };

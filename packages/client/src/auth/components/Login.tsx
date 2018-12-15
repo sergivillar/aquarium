@@ -23,7 +23,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState(passwordErrorMsg);
     const [showFormErrors, setShowFormErros] = useState(false);
-    const [requestError, setRequestError] = useState('');
+    const [serverError, setServerError] = useState('');
     const [isLogging, setIsLogging] = useState(false);
 
     const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,12 +57,12 @@ const Login = () => {
         setShowFormErros(false);
 
         api.login(email, password).then(async response => {
-            setRequestError('');
+            setServerError('');
             const data = await response.json();
 
             if (response.status !== 201) {
                 setIsLogging(false);
-                setRequestError(data.message);
+                setServerError(data.message);
                 return;
             }
 
@@ -83,6 +83,7 @@ const Login = () => {
                 isRequesting={isLogging}
                 onPress={submitLogin}
                 disabled={isInvalidLogin}
+                serverError={serverError}
                 footer={
                     <SingUpLink to="/singup">
                         If you do not have an account, please create it here.
@@ -104,7 +105,6 @@ const Login = () => {
                     errorMessage={showFormErrors ? passwordError : undefined}
                 />
             </AuthWrapper>
-            {!!requestError && <SnackBar type={SNACKBAR_DANGER}>{requestError}</SnackBar>}
         </>
     );
 };
