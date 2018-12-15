@@ -6,6 +6,7 @@ import Input from '../../components/Input';
 import api from '../../api';
 import {setItem} from '../../utils/local-storage';
 import {validateEmail} from '../../utils/validators';
+import SnackBar, {SNACKBAR_DANGER} from '../../components/Snackbar';
 
 const SingUpLink = styled(Link)`
     color: white;
@@ -21,7 +22,8 @@ const Login = () => {
     const [emailError, setEmailError] = useState(emailErrorMsg);
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState(passwordErrorMsg);
-    const [showErrors, setShowErros] = useState(false);
+    const [showFormErrors, setShowFormErros] = useState(false);
+    const [requestError, setRequestError] = useState('');
     const [isLogging, setIsLogging] = useState(false);
 
     const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,26 +50,31 @@ const Login = () => {
 
     const submitLogin = () => {
         if (emailError || passwordError) {
-            return setShowErros(true);
+            return setShowFormErros(true);
         }
 
         setIsLogging(true);
-        setShowErros(false);
+        setShowFormErros(false);
 
         api.login(email, password).then(async response => {
+            setRequestError('');
+            const data = await response.json();
+
             if (response.status !== 201) {
-                // TODO show errors in alert
                 setIsLogging(false);
+                setRequestError(data.message);
                 return;
             }
 
-            const {token, refreshToken} = await response.json();
+            const {token, refreshToken} = data;
+
             setItem({email, token, refreshToken});
             setIsLogging(false);
         });
     };
 
-    const isInvalidLogin: boolean = showErrors && (!email || !password || !!emailError || !!passwordError);
+    const isInvalidLogin: boolean =
+        showFormErrors && (!email || !password || !!emailError || !!passwordError);
 
     return (
         <>
@@ -87,16 +94,17 @@ const Login = () => {
                     type="text"
                     onChange={onChangeEmail}
                     placeholder="Email"
-                    errorMessage={showErrors ? emailError : undefined}
+                    errorMessage={showFormErrors ? emailError : undefined}
                 />
                 <Input
                     value={password}
                     type="password"
                     onChange={onChangePassword}
                     placeholder="Password"
-                    errorMessage={showErrors ? passwordError : undefined}
+                    errorMessage={showFormErrors ? passwordError : undefined}
                 />
             </AuthWrapper>
+            {!!requestError && <SnackBar type={SNACKBAR_DANGER}>{requestError}</SnackBar>}
         </>
     );
 };

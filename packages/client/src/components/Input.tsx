@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import {SECONDARY, SECONDARY_DARK, GREY_LIGTH, ERROR} from '../constants/colors';
+import {SECONDARY, GREY_LIGTH, ERROR} from '../constants/colors';
 
 const Container = styled.div`
     width: 100%;

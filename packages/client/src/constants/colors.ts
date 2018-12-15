@@ -11,3 +11,5 @@ export const GREY_LIGTH = '#e1e2e1';
 
 export const ERROR = '#d32f2f';
 export const DISABLE = '#dcdcdc';
+
+export const BACKGROUND_BLACK = '#323232';
