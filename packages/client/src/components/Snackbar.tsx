@@ -30,10 +30,9 @@ const SnackbarContainer = styled.div<ContainerProps>`
     left: 50%;
     height: 48px;
     font-size: 0.8rem;
-    border-radius: 2px;
-    box-shadow: 0 1px 4px 0px ${BACKGROUND_BLACK};
+    box-shadow: 0 0px 3px 0px ${BACKGROUND_BLACK};
     padding: 16px 0;
-    width: 90%;
+    width: 100%;
     background-color: ${({type}) => getBackgroundColor(type)};
     color: white;
     will-change: transform;
