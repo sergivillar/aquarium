@@ -1,11 +1,57 @@
 import React from 'react';
 import {Redirect} from 'react-router';
-import styled from 'styled-components/macro';
+import styled, {keyframes} from 'styled-components/macro';
 import icon from '../../assets/icons/fish-tank.svg';
 import Spinner from '../../components/Spinner';
 import {SECONDARY, SECONDARY_DARK, DISABLE} from '../../constants/colors';
 import {isAuthenticated} from '../../utils/user';
 import SnackBar, {SNACKBAR_DANGER} from '../../components/Snackbar';
+
+const cardAppears = keyframes`
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    visibility: visible;
+    transform: scaleY(1);
+  }
+`;
+
+const logoAppears = keyframes`
+  from {
+    transform: translateY(-1000px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(25px);
+  }
+
+  75% {
+    transform: translateY(-10px);
+  }
+
+  90% {
+    transform: translateY(5px);
+  }
+
+  to {
+    visibility: visible;
+    transform: translateY(0);
+  }
+`;
+
+const buttonAppears = keyframes`
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    visibility: visible;
+    transform: scale(1);
+  }
+`;
 
 const AuthContainer = styled.div`
     height: 100%;
@@ -27,6 +73,11 @@ const Card = styled.div`
     flex-direction: column;
     align-items: center;
     margin-bottom: 56px;
+    visibility: hidden;
+
+    animation: ${cardAppears} 0.4s forwards;
+    animation-delay: 1.2s;
+    transform-origin: bottom;
 
     & > div {
         margin-bottom: 24px;
@@ -36,6 +87,10 @@ const Card = styled.div`
 const Logo = styled.img`
     height: 128px;
     margin-bottom: 64px;
+    visibility: hidden;
+
+    animation: ${logoAppears} 0.4s forwards;
+    animation-delay: 0.8s;
 `;
 
 const Button = styled.button`
@@ -50,6 +105,10 @@ const Button = styled.button`
     background-color: ${SECONDARY};
     text-transform: uppercase;
     box-shadow: 0 4px 2px -2px #0000007a;
+    visibility: hidden;
+
+    animation: ${buttonAppears} 0.3s forwards;
+    animation-delay: 1.7s;
 
     :focus {
         outline: none;
@@ -74,7 +133,15 @@ interface Props {
     serverError?: string;
 }
 
-const Auth = ({isRequesting, disabled, footer, onPress, submitMessage, serverError, children}: Props) => {
+const AuthWrapper = ({
+    isRequesting,
+    disabled,
+    footer,
+    onPress,
+    submitMessage,
+    serverError,
+    children,
+}: Props) => {
     if (isAuthenticated()) {
         return <Redirect to="/" />;
     }
@@ -97,4 +164,4 @@ const Auth = ({isRequesting, disabled, footer, onPress, submitMessage, serverErr
     );
 };
 
-export default Auth;
+export default AuthWrapper;
