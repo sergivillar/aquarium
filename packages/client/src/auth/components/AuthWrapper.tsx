@@ -81,7 +81,7 @@ const footerIn = keyframes`
     }
 `;
 
-const AuthContainer = styled.div`
+const AuthContainer = styled.form`
     height: 100%;
     display: flex;
     justify-content: center;
@@ -188,16 +188,22 @@ const AuthWrapper = ({
         return <Redirect to="/" />;
     }
 
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLFormElement>) => {
+        if (event.key === 'Enter') {
+            onPress();
+        }
+    };
+
     return (
         <>
             {isRequesting && <Spinner />}
-            <AuthContainer>
+            <AuthContainer onKeyDown={handleKeyPress}>
                 <Logo src={icon} />
                 <Card>
                     {React.Children.map(children, (item, index) => (
                         <InputContainer index={index}>{item}</InputContainer>
                     ))}
-                    <Button disabled={disabled} onClick={onPress}>
+                    <Button type="button" disabled={disabled} onClick={onPress}>
                         {submitMessage}
                     </Button>
                 </Card>
