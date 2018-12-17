@@ -6,7 +6,6 @@ import Input from '../../components/Input';
 import api from '../../api';
 import {setItem} from '../../utils/local-storage';
 import {validateEmail} from '../../utils/validators';
-import SnackBar, {SNACKBAR_DANGER} from '../../components/Snackbar';
 
 const SingUpLink = styled(Link)`
     color: white;
