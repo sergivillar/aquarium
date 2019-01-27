@@ -3,7 +3,7 @@ import {Redirect} from 'react-router';
 import styled, {keyframes} from 'styled-components/macro';
 import icon from '../../assets/icons/fish-tank.svg';
 import Spinner from '../../components/Spinner';
-import {SECONDARY, SECONDARY_DARK, DISABLE} from '../../constants/colors';
+import {SECONDARY, SECONDARY_DARK, DISABLE, PRIMARY} from '../../constants/colors';
 import {isAuthenticated} from '../../utils/user';
 import SnackBar, {SNACKBAR_DANGER} from '../../components/Snackbar';
 
@@ -79,6 +79,11 @@ const footerIn = keyframes`
         visibility: visible;
         opacity: 1
     }
+`;
+
+const Wrapper = styled.div`
+    background-color: ${PRIMARY};
+    height: 100%;
 `;
 
 const AuthContainer = styled.form`
@@ -195,7 +200,7 @@ const AuthWrapper = ({
     };
 
     return (
-        <>
+        <Wrapper>
             {isRequesting && <Spinner />}
             <AuthContainer onKeyDown={handleKeyPress}>
                 <Logo src={icon} />
@@ -210,7 +215,7 @@ const AuthWrapper = ({
                 {!!footer && <FooterContainer>{footer}</FooterContainer>}
             </AuthContainer>
             {!!serverError && <SnackBar type={SNACKBAR_DANGER}>{serverError}</SnackBar>}
-        </>
+        </Wrapper>
     );
 };
 

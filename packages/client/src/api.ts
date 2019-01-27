@@ -104,4 +104,6 @@ const api = {
     grapqhl: client,
 };
 
+export {client};
+
 export default api;
