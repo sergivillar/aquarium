@@ -1,0 +1,13 @@
+schema: ./src/graphql/index.ts
+overwrite: true
+require:
+    - ts-node/register
+generates:
+    ./src/types.d.ts:
+        plugins:
+            - typescript-common
+            - typescript-server
+    ../client/src/types.d.ts:
+        plugins:
+            - typescript-common
+            - typescript-server

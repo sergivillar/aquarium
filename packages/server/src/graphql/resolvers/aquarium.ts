@@ -1,7 +1,7 @@
 import models from '../../models';
 import {UserInstance} from '../../models/user';
 import {AquariumInstance} from '../../models/aquarium';
-import {CreateAquariumMutationArgs, AquariumQueryArgs} from '../../typings/generated';
+import {CreateAquariumMutationArgs, AquariumQueryArgs} from '../../types';
 import {IContext} from '../';
 
 export default {

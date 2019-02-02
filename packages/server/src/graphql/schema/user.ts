@@ -4,11 +4,11 @@ export default gql`
     type User {
         id: ID!
         email: String!
-        aquariums: [Aquarium]!
+        aquariums: [Aquarium!]!
         createdAt: String
     }
 
     extend type Query {
-        me(email: String): User
+        me(email: String): User!
     }
 `;

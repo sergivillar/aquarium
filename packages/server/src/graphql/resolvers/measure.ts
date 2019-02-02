@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import models from '../../models';
 import {MeasureInstance} from '../../models/measure';
-import {CreateMeasureMutationArgs, GetMeasuresQueryArgs, PageInfo} from '../../typings/generated';
+import {CreateMeasureMutationArgs, GetMeasuresQueryArgs, PageInfo} from '../../types';
 
 const toCursorHash = (value: string) => Buffer.from(value).toString('base64');
 const fromCursorHash = (value: string) => Buffer.from(value, 'base64').toString('ascii');

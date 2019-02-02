@@ -16,7 +16,7 @@
         "unit-test": "NODE_ENV=test jest -c jest.config.unit.json",
         "test": "yarn unit-test && yarn integration-test",
         "lint": "node_modules/.bin/tslint -p ../../tsconfig.json",
-        "generate-types": "gql-gen --require ts-node/register --schema ./src/graphql/index.ts --template graphql-codegen-typescript-template --out ./src/typings/generated.d.ts"
+        "generate-types": "gql-gen"
     },
     "author": "Sergio Fernández",
     "license": "ISC",
@@ -40,8 +40,9 @@
         "@types/supertest": "^2.0.6",
         "babel-core": "^7.0.0-bridge",
         "babel-jest": "^23.6.0",
-        "graphql-code-generator": "^0.13.0",
-        "graphql-codegen-typescript-template": "^0.13.0",
+        "graphql-code-generator": "^0.16.0",
+        "graphql-codegen-typescript-common": "^0.16.0",
+        "graphql-codegen-typescript-server": "^0.16.0",
         "jest": "^23.6.0",
         "nodemon": "^1.18.3",
         "supertest": "^3.3.0",
